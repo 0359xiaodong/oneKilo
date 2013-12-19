@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <include 
+        android:id="@+id/nav_layout"
+        layout="@layout/nav_view"/>
+    <RelativeLayout 
+        android:layout_weight="1"
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent">
+    	<ListView 
+	        android:id="@+id/imagechoice_list"
+	        android:divider="@android:color/darker_gray"
+	        android:dividerHeight="1dp"
+	        android:fadingEdge="none"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="match_parent">
+	        
+	    </ListView>      
+	    <GridView 
+	        android:id="@+id/whole_image_grid"
+	        android:fadingEdge="none"
+	        android:numColumns="3"
+			android:stretchMode="columnWidth"
+			android:gravity="center"  
+			android:visibility="gone"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="match_parent">
+	        
+	    </GridView>
+    </RelativeLayout>
+    <LinearLayout 
+        android:orientation="horizontal"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center_vertical"
+    	android:background="@drawable/compose_photo_choose_background">
+        <HorizontalScrollView         
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+    		android:layout_margin="5dip"
+	    	android:layout_weight="1">
+	        <LinearLayout 
+	            android:id="@+id/image_haschoice"
+	    		android:layout_width="match_parent"
+	    		android:layout_height="wrap_content"    	
+	    		android:layout_gravity="center_vertical"
+	    		android:orientation="horizontal">
+	        </LinearLayout>
+	    </HorizontalScrollView>
+	    <LinearLayout 
+	        android:id="@+id/image_add_commit"
+	        android:background="@drawable/compose_photo_graychoose_button"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:paddingLeft="10dip"
+	        android:paddingRight="10dip"
+	        android:paddingTop="5dip"
+	        android:paddingBottom="5dip"
+	        android:layout_marginRight="10dip"
+	   		android:layout_width="wrap_content"
+	   		android:layout_height="wrap_content" >
+	        <TextView 		       	
+		        android:text="确认"
+		        android:textColor="@android:color/white"
+		        android:textSize="18sp"
+		   		android:layout_width="wrap_content"
+		   		android:layout_height="wrap_content" />
+	        <TextView 
+	            android:id="@+id/image_add_commitnum"
+	            android:text="@string/num_choice"           
+	            android:layout_marginTop="3dip"
+	            android:textColor="@android:color/white"
+		        android:textSize="12sp"	            
+		   		android:layout_width="wrap_content"
+		   		android:layout_height="wrap_content"/>
+	    </LinearLayout>
+	    
+    </LinearLayout>
+    
+</LinearLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:orientation="vertical"
+    android:background="#f7f7f7">
+    <include 
+        android:id="@+id/nav_view"
+     	layout="@layout/nav_view"/>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+       	android:layout_height="wrap_content"
+       	android:layout_marginTop="15dip"
+       	android:layout_marginLeft="15dip"
+       	android:layout_marginRight="15dip"
+       	android:orientation="vertical">
+        <EditText
+            android:id="@+id/fatie_title"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_vertical|top"
+	        android:hint="请输入标题（非必填）"
+	        android:lineSpacingMultiplier="1.2"
+	        android:textSize="16sp"
+	        android:padding="10dip"
+        	android:background="@drawable/list_blockbg_normal" />
+        <EditText
+            android:id="@+id/fatie_text"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_vertical|top"
+	        android:hint="请输入内容"
+	        android:lineSpacingMultiplier="1.2"
+	        android:layout_marginTop="15dip"
+	        android:padding="10dip"
+	        android:lines="5"
+	        android:textSize="16sp"
+        	android:background="@drawable/list_blockbg_normal" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/fatie_menu"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:layout_marginTop="15dip"
+	    android:layout_marginLeft="15dip"
+	    android:layout_marginRight="15dip"
+	    android:gravity="center_vertical"
+        android:background="@drawable/list_blockbg_normal">       
+        <HorizontalScrollView 
+            android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:padding="10dip">
+            <LinearLayout 
+                android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:orientation="horizontal"
+        		android:gravity="center_vertical">
+                <LinearLayout 
+	                android:id="@+id/temp_image_layout"
+            		android:layout_width="fill_parent"
+	        		android:layout_height="wrap_content"
+	        		android:orientation="horizontal">
+	                
+	            </LinearLayout>
+	            <ImageView 
+			        android:id="@+id/fatie_tianjiatupian"
+			        android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content"	
+		        	android:layout_marginLeft="5dip"        	
+		        	android:src="@drawable/fatie_tianjiatupian"/>
+            </LinearLayout>
+        </HorizontalScrollView>     	    		
+    </LinearLayout> 
+    <com.morningtel.onekilo.myview.MyMapView 
+        android:id="@+id/bmapView"
+   		android:layout_width="match_parent" 
+   		android:layout_height="200dip" 
+       	android:layout_margin="15dip"
+   		android:clickable="true" >
+        
+    </com.morningtel.onekilo.myview.MyMapView>
+	
+</LinearLayout>
