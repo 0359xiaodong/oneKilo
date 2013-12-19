@@ -29,9 +29,7 @@ import com.morningtel.onekilo.model.JsonParse;
 
 public class LocalServiceActivity extends BaseActivity {
 	
-	ImageView nav_back=null;
 	TextView nav_title=null;
-	ImageView nav_add=null;
 	LinearLayout service_layout=null;
 	
 	//服务列表
@@ -58,24 +56,8 @@ public class LocalServiceActivity extends BaseActivity {
 	
 	public void init() {
 		
-		nav_back=(ImageView) findViewById(R.id.nav_back);
-		nav_back.setOnClickListener(new ImageView.OnClickListener() {
-	
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}});
 		nav_title=(TextView) findViewById(R.id.nav_title);
 		nav_title.setText("服务");
-		nav_add=(ImageView) findViewById(R.id.nav_add);
-		nav_add.setOnClickListener(new ImageView.OnClickListener() {
-	
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}});
 		
 		service_layout=(LinearLayout) findViewById(R.id.service_layout);
 		

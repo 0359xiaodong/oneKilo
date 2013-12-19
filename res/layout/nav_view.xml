@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="52dip" 
+    android:layout_height="50dip" 
     android:background="@drawable/nav_bg">
     <TextView 
         android:id="@+id/nav_title"
@@ -12,22 +12,37 @@
     	android:gravity="center"
     	android:layout_centerInParent="true"
     	android:textStyle="bold"/>
-	<ImageView 
-	    android:id="@+id/nav_add"
-	    android:visibility="invisible"
-	    android:src="@drawable/nav_add_sel"
+    <LinearLayout 
+        android:id="@+id/nav_add_layout"
 	    android:layout_marginBottom="5dip"
-	    android:layout_marginRight="5dip"
+	    android:layout_marginRight="11dip"
 	    android:layout_alignParentRight="true"
 	    android:layout_centerVertical="true"
 	    android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"/>
-	<ImageView 
-        android:id="@+id/nav_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    	android:layout_height="wrap_content"
+	    android:background="@drawable/xz_sel"
+	    android:gravity="center"
+	    android:visibility="invisible">
+        <ImageView 
+		    android:id="@+id/nav_add_image"
+		    android:src="@drawable/nav_choice"
+		    android:padding="7dip"
+		    android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"/>
+    </LinearLayout>
+	<LinearLayout 
+	    android:id="@+id/nav_back_layout"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dip"
+        android:layout_marginLeft="11dip"
         android:visibility="invisible"
-        android:src="@drawable/fanhui"/>
+	    android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+	    android:background="@drawable/xz_sel"
+	    android:gravity="center">
+	    <ImageView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+		    android:padding="7dip"
+	        android:src="@drawable/fanhui"/>
+	</LinearLayout>	
 </RelativeLayout>

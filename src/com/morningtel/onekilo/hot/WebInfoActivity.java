@@ -12,6 +12,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -35,9 +37,10 @@ import com.morningtel.onekilo.model.Menu;
 
 public class WebInfoActivity extends BaseActivity {
 	
-	ImageView nav_back=null;
 	TextView nav_title=null;
-	ImageView nav_add=null;
+	LinearLayout nav_back_layout=null;
+	LinearLayout nav_add_layout=null;
+	ImageView nav_add_image=null;
 	RelativeLayout nav_view=null;
 	
 	PullToRefreshWebView mPullRefreshWebView=null;
@@ -63,9 +66,9 @@ public class WebInfoActivity extends BaseActivity {
 	public void init() {
 
 		nav_view=(RelativeLayout) findViewById(R.id.nav_view);
-		nav_back=(ImageView) findViewById(R.id.nav_back);
-		nav_back.setVisibility(View.VISIBLE);
-		nav_back.setOnClickListener(new ImageView.OnClickListener() {
+		nav_back_layout=(LinearLayout) findViewById(R.id.nav_back_layout);
+		nav_back_layout.setVisibility(View.VISIBLE);
+		nav_back_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -80,14 +83,8 @@ public class WebInfoActivity extends BaseActivity {
 				// TODO Auto-generated method stub		
 				activity_webview.loadUrl("javascript:titleClick()");
 			}});
-		nav_add=(ImageView) findViewById(R.id.nav_add);
-		nav_add.setOnClickListener(new ImageView.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}});
+		nav_add_layout=(LinearLayout) findViewById(R.id.nav_add_layout);
+		nav_add_image=(ImageView) findViewById(R.id.nav_add_image);
 				
 		web_1_bottom_layout=(RelativeLayout) findViewById(R.id.web_1_bottom_layout);
 		if(getIntent().getExtras().getInt("needBar")==1) {
@@ -183,8 +180,8 @@ public class WebInfoActivity extends BaseActivity {
 			nav_view.setVisibility(View.GONE);
 		}
 		if(getIntent().getExtras().getParcelableArrayList("menu")!=null&&getIntent().getExtras().getParcelableArrayList("menu").size()>0) {
-			nav_add.setVisibility(View.VISIBLE);
-			nav_add.setOnClickListener(new ImageView.OnClickListener() {
+			nav_add_layout.setVisibility(View.VISIBLE);
+			nav_add_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -194,18 +191,21 @@ public class WebInfoActivity extends BaseActivity {
 						menuJumpControll(menus, 0);
 					}
 					else {
+						
 						if(menu_layout.getVisibility()==View.VISIBLE) {
 							menu_layout.setVisibility(View.GONE);
+							rotate(false);
 						}
 						else {
 							menu_layout.setVisibility(View.VISIBLE);
+							rotate(true);
 						}
 					}
 				}});
 			addMenuLayout();
 		}
 		else {
-			nav_add.setVisibility(View.GONE);
+			nav_add_layout.setVisibility(View.GONE);
 		}
 		nav_title.setText(getIntent().getExtras().getString("hotName"));
 		IntentFilter filter=new IntentFilter();
@@ -225,10 +225,13 @@ public class WebInfoActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					menu_layout.setVisibility(View.GONE);
 					menuJumpControll(menus, pos);
 				}});
 			menu_layout.addView(view);
+			if(i!=(menus.size()-1)) {
+				View view_split=LayoutInflater.from(WebInfoActivity.this).inflate(R.layout.view_splitline, null);
+				menu_layout.addView(view_split);
+			}
 		}
 	}
 	
@@ -488,4 +491,17 @@ public class WebInfoActivity extends BaseActivity {
 			}
 		}};
 	
+	public void rotate(boolean forward) {
+		RotateAnimation animation=null;
+		if(forward) {
+			animation=new RotateAnimation(0f, 45f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		}
+		else {
+			animation=new RotateAnimation(45f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		}
+		animation.setDuration(300);
+		animation.setFillAfter(true);
+		nav_add_image.setAnimation(animation);
+		animation.startNow();
+	}
 }

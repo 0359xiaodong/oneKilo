@@ -43,7 +43,7 @@ public class ImageChoiceActivity extends BaseActivity {
 	//选中的图片合集
 	ArrayList<ImageItemModel> choiceImageList=null;
 	
-	ImageView nav_back=null;
+	LinearLayout nav_back_layout=null;
 	TextView nav_title=null;
 	
 	ListView imagechoice_list=null;
@@ -91,9 +91,9 @@ public class ImageChoiceActivity extends BaseActivity {
 	}
 	
 	public void init() {
-		nav_back=(ImageView) findViewById(R.id.nav_back);
-		nav_back.setVisibility(View.VISIBLE);
-		nav_back.setOnClickListener(new ImageView.OnClickListener() {
+		nav_back_layout=(LinearLayout) findViewById(R.id.nav_back_layout);
+		nav_back_layout.setVisibility(View.VISIBLE);
+		nav_back_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

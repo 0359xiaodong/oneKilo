@@ -45,9 +45,9 @@ import com.morningtel.onekilo.myview.MyMapView;
 
 public class AddFormActivity extends BaseActivity {
 	
-	ImageView nav_back=null;
 	TextView nav_title=null;
-	ImageView nav_add=null;
+	LinearLayout nav_back_layout=null;
+	LinearLayout nav_add_layout=null;
 	
 	EditText fatie_title=null;
 	EditText fatie_text=null;
@@ -127,28 +127,27 @@ public class AddFormActivity extends BaseActivity {
 	}
 	
 	public void init() {
-		nav_back=(ImageView) findViewById(R.id.nav_back);
-		nav_back.setVisibility(View.VISIBLE);
-		nav_back.setOnClickListener(new ImageView.OnClickListener() {
+		nav_back_layout=(LinearLayout) findViewById(R.id.nav_back_layout);
+		nav_back_layout.setVisibility(View.VISIBLE);
+		nav_back_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				finish();
 			}});
-		nav_title=(TextView) findViewById(R.id.nav_title);
-		nav_title.setText(getIntent().getExtras().getString("hotName"));
-		nav_add=(ImageView) findViewById(R.id.nav_add);
-		nav_add.setVisibility(View.VISIBLE);
-		nav_add.setOnClickListener(new ImageView.OnClickListener() {
+		nav_add_layout=(LinearLayout) findViewById(R.id.nav_add_layout);
+		nav_add_layout.setVisibility(View.VISIBLE);
+		nav_add_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				uploadForm();
-				setResult(RESULT_OK, getIntent());
 				finish();
 			}});
+		nav_title=(TextView) findViewById(R.id.nav_title);
+		nav_title.setText(getIntent().getExtras().getString("hotName"));
 		
 		fatie_title=(EditText) findViewById(R.id.fatie_title);
 		if(CommonUtils.convertNull(af.getNeedTitle()).equals("")) {

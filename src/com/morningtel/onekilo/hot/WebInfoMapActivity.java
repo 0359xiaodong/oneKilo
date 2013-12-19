@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.BMapManager;
@@ -27,7 +27,7 @@ import com.morningtel.onekilo.myview.MyMapView;
 public class WebInfoMapActivity extends BaseActivity {
 	
 	MyMapView bmapView=null;
-	ImageView nav_back=null;
+	LinearLayout nav_back_layout=null;
 	TextView nav_title=null;
 	
 	private Button button=null;
@@ -86,9 +86,9 @@ public class WebInfoMapActivity extends BaseActivity {
 		
         nav_title=(TextView) findViewById(R.id.nav_title);
 		nav_title.setText(getIntent().getExtras().getString("hotName"));
-		nav_back=(ImageView) findViewById(R.id.nav_back);
-		nav_back.setVisibility(View.VISIBLE);
-		nav_back.setOnClickListener(new ImageView.OnClickListener() {
+		nav_back_layout=(LinearLayout) findViewById(R.id.nav_back_layout);
+		nav_back_layout.setVisibility(View.VISIBLE);
+		nav_back_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -26,8 +28,9 @@ public class WebInfoTabActivity extends TabActivity {
 	
 	TabHost host=null;
 	
-	ImageView nav_back=null;
-	ImageView nav_add=null;
+	LinearLayout nav_back_layout=null;
+	LinearLayout nav_add_layout=null;
+	ImageView nav_add_image=null;
 	TextView left_tab=null;
 	TextView right_tab=null;
 	
@@ -49,22 +52,25 @@ public class WebInfoTabActivity extends TabActivity {
 	}
 	
 	public void init() {
-		nav_back=(ImageView) findViewById(R.id.nav_back);
-		nav_back.setVisibility(View.VISIBLE);
-		nav_back.setOnClickListener(new ImageView.OnClickListener() {
+		nav_back_layout=(LinearLayout) findViewById(R.id.nav_back_layout);
+		nav_back_layout.setVisibility(View.VISIBLE);
+		nav_back_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				finish();
 			}});
-		nav_add=(ImageView) findViewById(R.id.nav_add);
+		nav_add_layout=(LinearLayout) findViewById(R.id.nav_add_layout);
+		nav_add_image=(ImageView) findViewById(R.id.nav_add_image);
 		left_tab=(TextView) findViewById(R.id.left_tab);
 		left_tab.setOnClickListener(new TextView.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				left_tab.setBackgroundResource(R.drawable.tab_left_press);
+				right_tab.setBackgroundResource(R.drawable.tab_right_nor);
 				setTab(0);
 			}});
 		right_tab=(TextView) findViewById(R.id.right_tab);
@@ -73,6 +79,8 @@ public class WebInfoTabActivity extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				left_tab.setBackgroundResource(R.drawable.tab_left_nor);
+				right_tab.setBackgroundResource(R.drawable.tab_right_press);
 				setTab(1);
 			}});
 		
@@ -87,8 +95,8 @@ public class WebInfoTabActivity extends TabActivity {
 		
 		menu_tab_layout=(LinearLayout) findViewById(R.id.menu_tab_layout);
 		if(getIntent().getExtras().getParcelableArrayList("menu")!=null&&getIntent().getExtras().getParcelableArrayList("menu").size()>0) {
-			nav_add.setVisibility(View.VISIBLE);
-			nav_add.setOnClickListener(new ImageView.OnClickListener() {
+			nav_add_layout.setVisibility(View.VISIBLE);
+			nav_add_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -97,19 +105,21 @@ public class WebInfoTabActivity extends TabActivity {
 					if(menus.size()==1) {
 						menuJumpControll(menus, 0);
 					}
-					else {
+					else {						
 						if(menu_tab_layout.getVisibility()==View.VISIBLE) {
 							menu_tab_layout.setVisibility(View.GONE);
+							rotate(false);
 						}
 						else {
 							menu_tab_layout.setVisibility(View.VISIBLE);
+							rotate(true);
 						}
 					}
 				}});
 			addMenuLayout();
 		}
 		else {
-			nav_add.setVisibility(View.GONE);
+			nav_add_layout.setVisibility(View.GONE);
 		}
 	}
 	
@@ -147,13 +157,16 @@ public class WebInfoTabActivity extends TabActivity {
 			TextView menu_text=(TextView) view.findViewById(R.id.menu_text);
 			menu_text.setText(menus.get(i).getName());
 			menu_tab_layout.addView(view);
+			if(i!=(menus.size()-1)) {
+				View view_split=LayoutInflater.from(WebInfoTabActivity.this).inflate(R.layout.view_splitline, null);
+				menu_tab_layout.addView(view_split);
+			}
 			final int pos=i;
 			view.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					menu_tab_layout.setVisibility(View.GONE);
 					menuJumpControll(menus, pos);
 				}});
 		}
@@ -219,5 +232,18 @@ public class WebInfoTabActivity extends TabActivity {
 			System.out.println("onActivityResultTab");
 		}
 	}
-
+	
+	public void rotate(boolean forward) {
+		RotateAnimation animation=null;
+		if(forward) {
+			animation=new RotateAnimation(0f, 45f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		}
+		else {
+			animation=new RotateAnimation(45f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		}
+		animation.setDuration(300);
+		animation.setFillAfter(true);
+		nav_add_image.setAnimation(animation);
+		animation.startNow();
+	}
 }

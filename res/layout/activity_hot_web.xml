@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@android:color/white">
+    android:orientation="vertical"     
+    android:background="#e6e6e6">
     <include 
         android:id="@+id/nav_view"
         layout="@layout/nav_view"/>
@@ -73,10 +73,10 @@
 	        android:id="@+id/menu_layout"
 	        android:orientation="vertical"
 	        android:layout_alignParentRight="true"
-	        android:background="@drawable/menu_layout"
+	        android:background="@drawable/menu_bg"
 	        android:gravity="center"
 	        android:visibility="gone"
-	        android:layout_width="wrap_content"
+	        android:layout_width="120dip"
     		android:layout_height="wrap_content">
 	        
 	    </LinearLayout>
