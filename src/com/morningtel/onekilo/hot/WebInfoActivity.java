@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -141,6 +142,7 @@ public class WebInfoActivity extends BaseActivity {
 		activity_webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 		//不使用缓存：
 		activity_webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+		activity_webview.getSettings().setDomStorageEnabled(true);
 		WebSettings settings=activity_webview.getSettings();
 		settings.setJavaScriptEnabled(true);
 		activity_webview.addJavascriptInterface(this, "JumpActivity");
@@ -291,6 +293,7 @@ public class WebInfoActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	@JavascriptInterface
 	/**
 	 * 在js调用一个函数打开一个新浏览器
 	 * @param title
@@ -310,6 +313,7 @@ public class WebInfoActivity extends BaseActivity {
 //		startActivity(intent2);
 	}
 	
+	@JavascriptInterface
 	/**
 	 * 在js调用一个函数打开一个新的不带下拉滑动的浏览器
 	 * @param title
@@ -329,6 +333,7 @@ public class WebInfoActivity extends BaseActivity {
 //		startActivity(intent2);
 	}
 	
+	@JavascriptInterface
 	/**
 	 * js修改当前浏览器的title，如果是选项卡则修改当前选项卡的title
 	 * @param title
@@ -337,6 +342,7 @@ public class WebInfoActivity extends BaseActivity {
 		nav_title.setText(title);
 	}
 	
+	@JavascriptInterface
 	/**
 	 * Js函数调用发帖功能
 	 * @param addStatus
@@ -359,6 +365,7 @@ public class WebInfoActivity extends BaseActivity {
 //		startActivity(intent);
 	}
 	
+	@JavascriptInterface
 	/**
 	 * Js调用评论功能
 	 * @param title
@@ -377,6 +384,14 @@ public class WebInfoActivity extends BaseActivity {
 //		startActivity(intent);
 	}
 	
+	@JavascriptInterface
+	/**
+	 * 回复评论
+	 * @param title
+	 * @param commentTopicId
+	 * @param parentId
+	 * @param receiveUserId
+	 */
 	public void replayComment(String title, String commentTopicId, String parentId, String receiveUserId) {
 //		Intent intent=new Intent();
 //		intent.setClass(WebInfoActivity.this, FaTieActivity.class);
@@ -390,6 +405,12 @@ public class WebInfoActivity extends BaseActivity {
 //		startActivity(intent);
 	}
 
+	@JavascriptInterface
+	/**
+	 * 跳转到发帖
+	 * @param title
+	 * @param addForm
+	 */
 	public void jumpToAddform(String title, String addForm) {
 		Intent intent_6=new Intent(WebInfoActivity.this, AddFormActivity.class);
 		Bundle bundle_6=new Bundle();
@@ -399,6 +420,12 @@ public class WebInfoActivity extends BaseActivity {
 		startActivityForResult(intent_6, 501);
 	}
 	
+	@JavascriptInterface
+	/**
+	 * 跳转到地图
+	 * @param title
+	 * @param geo
+	 */
 	public void jumpToMap(String title, String geo) {
 		ArrayList<String> geo_list=JsonParse.getGeoList(geo);
 		if(geo_list.size()>0) {
@@ -414,6 +441,12 @@ public class WebInfoActivity extends BaseActivity {
 		}
 	}
 	
+	@JavascriptInterface
+	/**
+	 * 后退刷新
+	 * @param needRefresh
+	 * @param tabindex
+	 */
 	public void jumpback(int needRefresh, int tabindex) {
 		Intent intent=getIntent();
 		Bundle bundle=new Bundle();
