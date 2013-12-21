@@ -89,9 +89,8 @@ public class AddFormActivity extends BaseActivity {
 		public void onGetPermissionState(int arg0) {
 			// TODO Auto-generated method stub
 			if(arg0!=0) {
-				
-			}
-			showCustomToast("地图引擎未获取到足够的权限");
+				showCustomToast("地图引擎未获取到足够的权限");
+			}			
 		}
 		
 	}
@@ -102,7 +101,7 @@ public class AddFormActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
-		app=(OneKiloApplication)this.getApplication();
+		app=(OneKiloApplication) getApplication();
         if (app.mBMapManager==null) {
             app.mBMapManager=new BMapManager(this);
             app.mBMapManager.init(((OneKiloApplication) getApplication()).strKey, new MyGeneralListener());
@@ -263,8 +262,7 @@ public class AddFormActivity extends BaseActivity {
             bmapView.refresh();
             //移动到定位点
             mMapController.animateTo(new GeoPoint((int)(locData.latitude* 1e6), (int)(locData.longitude *  1e6)));
-            myLocationOverlay.setLocationMode(LocationMode.FOLLOWING);
-            
+            myLocationOverlay.setLocationMode(LocationMode.FOLLOWING);            
 		}
 
 		@Override

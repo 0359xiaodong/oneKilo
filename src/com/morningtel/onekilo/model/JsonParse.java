@@ -18,7 +18,7 @@ public class JsonParse {
 	 * @param str
 	 * @return
 	 */
-	public static boolean checkUser(String str, Context context) {
+	public static boolean checkPermission(String str, Context context) {
 		
 		try {
 			JSONObject obj=new JSONObject(str);
@@ -43,7 +43,7 @@ public class JsonParse {
 		ArrayList<Hot> hot_list=new ArrayList<Hot>();
 		try {
 			JSONObject obj=new JSONObject(str);
-			if(!checkUser(str, context)) {
+			if(!checkPermission(str, context)) {
 				return null;
 			}
 			JSONArray data_array=obj.getJSONArray("data");
@@ -289,7 +289,7 @@ public class JsonParse {
 		User user=new User();
 		try {
 			JSONObject obj=new JSONObject(str);
-			if(!checkUser(str, context)) {
+			if(!checkPermission(str, context)) {
 				return null;
 			}
 			JSONObject data_obj=obj.getJSONObject("data");
@@ -357,4 +357,34 @@ public class JsonParse {
 		}
 		return geo_list;
 	}
+	
+	/**
+	 * 判断签到是否成功
+	 * @param str
+	 * @param context
+	 * @return
+	 */
+	public static boolean isSignOK(String str, Context context) {
+		try {
+			JSONObject obj=new JSONObject(str);
+			if(!checkPermission(str, context)) {
+				return false;
+			}
+			JSONObject data_obj=obj.getJSONObject("data");
+			if(data_obj.getInt("result")==1) {
+				return true;
+			}
+			else if(data_obj.getInt("result")==0) {
+				CommonUtils.showCustomToast(context, new String(data_obj.getString("message").getBytes("iso-8859-1"), "utf-8"));
+				return false;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	} 
 }

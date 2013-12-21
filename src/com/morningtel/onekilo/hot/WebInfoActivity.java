@@ -31,6 +31,7 @@ import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.addform.AddFormActivity;
 import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.mappois.MappoisActivity;
 import com.morningtel.onekilo.model.AddForm;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
@@ -448,7 +449,7 @@ public class WebInfoActivity extends BaseActivity {
 	public void jumpToMap(String title, String geo) {
 		ArrayList<String> geo_list=JsonParse.getGeoList(geo);
 		if(geo_list.size()>0) {
-			Intent intent=new Intent(WebInfoActivity.this, WebInfoMapActivity.class);
+			Intent intent=new Intent(WebInfoActivity.this, MappoisActivity.class);
 			Bundle bundle=new Bundle();
 			bundle.putString("hotName", title);
 			bundle.putStringArrayList("geo_list", geo_list);

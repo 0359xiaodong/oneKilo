@@ -93,13 +93,14 @@
         <activity android:name=".localService.LocalServiceActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".hot.WebInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".hot.WebInfoTabActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
-        <activity android:name=".hot.WebInfoMapActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
+        <activity android:name=".mappois.MappoisActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".addform.AddFormActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".addform.ImageChoiceActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".message.MessageActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".community.CommunityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".voice.VoiceActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
+        <activity android:name=".sign.SignActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         
         <service
             android:name="com.baidu.location.f"

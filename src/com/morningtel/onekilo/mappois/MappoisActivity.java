@@ -1,4 +1,4 @@
-package com.morningtel.onekilo.hot;
+package com.morningtel.onekilo.mappois;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.myview.MyMapView;
 
-public class WebInfoMapActivity extends BaseActivity {
+public class MappoisActivity extends BaseActivity {
 	
 	MyMapView bmapView=null;
 	LinearLayout nav_back_layout=null;
@@ -72,7 +72,7 @@ public class WebInfoMapActivity extends BaseActivity {
             app.mBMapManager.init(((OneKiloApplication) getApplication()).strKey,new MyGeneralListener());
         }
 		
-		setContentView(R.layout.activity_webinfomap);
+		setContentView(R.layout.activity_mappois);
 		
 		geo_list=getIntent().getStringArrayListExtra("geo_list");
 		

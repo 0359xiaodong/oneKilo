@@ -27,6 +27,7 @@ import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
+import com.morningtel.onekilo.sign.SignActivity;
 import com.morningtel.onekilo.voice.VoiceActivity;
 
 public class LocalServiceActivity extends BaseActivity {
@@ -66,6 +67,9 @@ public class LocalServiceActivity extends BaseActivity {
 		getLocalService();
 	}
 	
+	/**
+	 * 获取本地服务列表
+	 */
 	public void getLocalService() {
 		final Handler handler=new Handler() {
 			@Override
@@ -157,6 +161,9 @@ public class LocalServiceActivity extends BaseActivity {
 							bundle.putInt("btnType", hot_list.get(position_).getBtnType());
 							break;
 						case Hot.LOCATION_VIEWTYPE:
+							intent=new Intent(LocalServiceActivity.this, SignActivity.class);
+							bundle.putString("api", hot_list.get(position_).getTabs().get(0).getApi());
+							bundle.putString("hotName", hot_list.get(position_).getTabs().get(0).getName());
 							break;
 						case Hot.VOICE_VIEWTYPE:
 							break;
