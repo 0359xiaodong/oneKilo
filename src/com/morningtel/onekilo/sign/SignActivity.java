@@ -2,6 +2,7 @@ package com.morningtel.onekilo.sign;
 
 import java.util.HashMap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,7 @@ import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.model.JsonParse;
+import com.morningtel.onekilo.service.MusicService;
 
 public class SignActivity extends BaseActivity {
 	
@@ -158,14 +160,20 @@ public class SignActivity extends BaseActivity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
-				if(JsonParse.isSignOK(msg.obj.toString(), SignActivity.this)) {
-					showCustomToast("签到成功");
-					finish();
+				String result=JsonParse.isSignOK(msg.obj.toString(), SignActivity.this);
+				boolean isSuccess=result.split(":")[0].equals("1")?true:false;
+				geo_record_state.setText(result.split(":")[1]);
+				if(isSuccess) {					
+					handler_finish.sendEmptyMessageDelayed(0, 3000);
 				}
 				else {
-					geo_record_state.setText("签到失败");
 					geo_record_button.setVisibility(View.VISIBLE);
 				}
+				Intent intent=new Intent(SignActivity.this, MusicService.class);
+				Bundle bundle=new Bundle();
+				bundle.putInt("music", R.raw.phonering);
+				intent.putExtras(bundle);
+				startService(intent);
 			}
 		};
 		
@@ -183,6 +191,15 @@ public class SignActivity extends BaseActivity {
 				handler.sendMessage(m);
 			}}).start();
 	}
+	
+	final Handler handler_finish=new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			finish();
+		}
+	};
 	
 	@Override
 	protected void onDestroy() {

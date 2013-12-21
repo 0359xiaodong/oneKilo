@@ -364,19 +364,18 @@ public class JsonParse {
 	 * @param context
 	 * @return
 	 */
-	public static boolean isSignOK(String str, Context context) {
+	public static String isSignOK(String str, Context context) {
 		try {
 			JSONObject obj=new JSONObject(str);
 			if(!checkPermission(str, context)) {
-				return false;
+				return "0:Õ¯¬Á“Ï≥££¨«Î…‘∫Û‘Ÿ ‘";
 			}
 			JSONObject data_obj=obj.getJSONObject("data");
 			if(data_obj.getInt("result")==1) {
-				return true;
+				return "1:"+new String(data_obj.getString("message").getBytes("iso-8859-1"), "utf-8");
 			}
 			else if(data_obj.getInt("result")==0) {
-				CommonUtils.showCustomToast(context, new String(data_obj.getString("message").getBytes("iso-8859-1"), "utf-8"));
-				return false;
+				return "0:"+new String(data_obj.getString("message").getBytes("iso-8859-1"), "utf-8");
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -385,6 +384,6 @@ public class JsonParse {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return "0:Õ¯¬Á“Ï≥££¨«Î…‘∫Û‘Ÿ ‘";
 	} 
 }

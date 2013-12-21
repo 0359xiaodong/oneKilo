@@ -21,6 +21,7 @@ import com.morningtel.onekilo.R;
 
 public class VoiceActivity extends BaseActivity {
 	
+	TextView voice_record_state=null;
 	TextView voice_record_button=null;
 	TextView voice_stop_button=null;
 	ImageViewEx voice_imageViewEx1=null;
@@ -33,6 +34,8 @@ public class VoiceActivity extends BaseActivity {
 	
 	//是否开始录音
 	private boolean isStart=false;
+	//当前录音开始时间
+	long recordStartTime=0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,26 +72,22 @@ public class VoiceActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(!isStart) {
-					fileName=Environment.getExternalStorageDirectory().getPath()+"/onekilo/temp"+"/"+System.currentTimeMillis()+".3gp";
-					File file=new File(fileName);
-					if(!file.exists()) {
-						try {
-							file.createNewFile();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					voice_record_button.setText("说完发送");
-					startRecording();
-				}
-				else {
-					voice_record_button.setText("开始说话");
-					stopRecording();
-				}
-				isStart=!isStart;
+				stopRecording();
+				voice_record_state.setText("正在发送");
 			}});
+		voice_record_state=(TextView) findViewById(R.id.voice_record_state);
+		voice_record_state.setText("开始说话");
+		fileName=Environment.getExternalStorageDirectory().getPath()+"/onekilo/temp"+"/"+System.currentTimeMillis()+".3gp";
+		File file=new File(fileName);
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		startRecording();
 	}
 	
 	private void startPlay() {
@@ -114,7 +113,7 @@ public class VoiceActivity extends BaseActivity {
 	
 	private void stopPlaying() {
 		player.release();
-		player = null;
+		player=null;
     }
 	
 	private void startRecording() {
@@ -140,10 +139,12 @@ public class VoiceActivity extends BaseActivity {
 	}
 	
 	private void stopRecording() {
-		recorder.stop();
-		recorder.reset();
-		recorder.release();
-		recorder=null;
+		if(recorder!=null) {
+			recorder.stop();
+			recorder.reset();
+			recorder.release();
+			recorder=null;
+		}		
 	}
 	
 	public void getMicroPhoneVoice() {
@@ -152,21 +153,30 @@ public class VoiceActivity extends BaseActivity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
-				if(msg.what<30) {
-					voice_imageViewEx1.setVisibility(View.GONE);
-					voice_imageViewEx2.setVisibility(View.GONE);
-					voice_imageViewEx3.setVisibility(View.VISIBLE);
+				//以20为界限，如果超过20，则开始记录时间
+				if(msg.what>20&&!isStart) {
+					isStart=true;
+					voice_record_button.setVisibility(View.VISIBLE);
+					recordStartTime=System.currentTimeMillis();
 				}
-				else if(msg.what>=30&&msg.what<70) {
-					voice_imageViewEx1.setVisibility(View.GONE);
-					voice_imageViewEx2.setVisibility(View.VISIBLE);
-					voice_imageViewEx3.setVisibility(View.GONE);
-				}
-				else if(msg.what>=70) {
-					voice_imageViewEx1.setVisibility(View.VISIBLE);
-					voice_imageViewEx2.setVisibility(View.GONE);
-					voice_imageViewEx3.setVisibility(View.GONE);
-				}
+				if(isStart) {
+					voice_record_state.setText("正在记录。。。"+(System.currentTimeMillis()-recordStartTime)/1000+"秒");
+					if(msg.what<30) {
+						voice_imageViewEx1.setVisibility(View.GONE);
+						voice_imageViewEx2.setVisibility(View.GONE);
+						voice_imageViewEx3.setVisibility(View.VISIBLE);
+					}
+					else if(msg.what>=30&&msg.what<70) {
+						voice_imageViewEx1.setVisibility(View.GONE);
+						voice_imageViewEx2.setVisibility(View.VISIBLE);
+						voice_imageViewEx3.setVisibility(View.GONE);
+					}
+					else if(msg.what>=70) {
+						voice_imageViewEx1.setVisibility(View.VISIBLE);
+						voice_imageViewEx2.setVisibility(View.GONE);
+						voice_imageViewEx3.setVisibility(View.GONE);
+					}
+				}				
 			}
 		};
 		
@@ -200,14 +210,7 @@ public class VoiceActivity extends BaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		if(isStart) {
-			stopRecording();
-		}
-		isStart=false;
-		if(recorder!=null) { 
-			recorder.release(); 
-			recorder=null; 
-        }  
+		stopRecording();  
         if (player!=null) { 
         	player.release(); 
         	player=null; 

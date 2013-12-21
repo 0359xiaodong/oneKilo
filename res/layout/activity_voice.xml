@@ -3,6 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e6e6e6" >
+    <TextView 
+        android:id="@+id/voice_record_state"
+        android:textSize="22sp"
+        android:layout_marginTop="25dip"
+        android:layout_marginLeft="20dip"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
     <RelativeLayout 
         android:id="@+id/voice_imageViewEx_layout"
         android:layout_width="match_parent"
@@ -44,8 +51,9 @@
 	        android:layout_width="120dip"
 	        android:layout_margin="10dip"
 	        android:gravity="center"
+	        android:visibility="gone"
 	        android:layout_height="wrap_content"
-	        android:text="开始说话"/>
+	        android:text="说完发送"/>
 		<TextView 
 		    android:layout_toRightOf="@id/voice_record_button"
 		    android:id="@+id/voice_stop_button"
