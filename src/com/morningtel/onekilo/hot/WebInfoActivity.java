@@ -32,6 +32,7 @@ import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.addform.AddFormActivity;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.model.AddForm;
+import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.model.Menu;
 
@@ -53,12 +54,19 @@ public class WebInfoActivity extends BaseActivity {
 	ProgressBar web_1_bottom_pb=null;
 	LinearLayout menu_layout=null;
 	
+	//判断是否执行动画效果
+	boolean doAni=false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_hot_web);
+		
+		if(getIntent().getExtras().getInt("btnType")==Hot.ADD_BUTTONTYPE) {
+			doAni=true;
+		}
 		
 		init();
 	}
@@ -85,6 +93,12 @@ public class WebInfoActivity extends BaseActivity {
 			}});
 		nav_add_layout=(LinearLayout) findViewById(R.id.nav_add_layout);
 		nav_add_image=(ImageView) findViewById(R.id.nav_add_image);
+		if(doAni) {
+			nav_add_image.setImageResource(R.drawable.nav_choice);
+		}
+		else {
+			nav_add_image.setImageResource(R.drawable.nav_more);
+		}
 				
 		web_1_bottom_layout=(RelativeLayout) findViewById(R.id.web_1_bottom_layout);
 		if(getIntent().getExtras().getInt("needBar")==1) {
@@ -173,7 +187,7 @@ public class WebInfoActivity extends BaseActivity {
             }
 		});
 		settings.setBuiltInZoomControls(false);
-		activity_webview.loadUrl(getIntent().getExtras().getString("api")+"?token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken());
+		loadUrl();
 		menu_layout=(LinearLayout) findViewById(R.id.menu_layout);
 		
 		if(getIntent().getExtras().getString("hotName").equals("")) {
@@ -190,8 +204,7 @@ public class WebInfoActivity extends BaseActivity {
 					if(menus.size()==1) {
 						menuJumpControll(menus, 0);
 					}
-					else {
-						
+					else {						
 						if(menu_layout.getVisibility()==View.VISIBLE) {
 							menu_layout.setVisibility(View.GONE);
 							rotate(false);
@@ -252,6 +265,9 @@ public class WebInfoActivity extends BaseActivity {
 			bundle.putInt("needBar", 0);
 			bundle.putString("api", api);
 			bundle.putParcelableArrayList("menu", null);
+			if(getIntent().getExtras().getString("groupId")!=null) {
+				bundle.putString("groupId", getIntent().getExtras().getString("groupId"));
+			}
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1002);
 			break;
@@ -465,10 +481,10 @@ public class WebInfoActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode==RESULT_OK&&requestCode==1001) {
-			activity_webview.loadUrl(getIntent().getExtras().getString("api")+"?token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken());
+			loadUrl();
 		}
 		else if(resultCode==RESULT_OK&&requestCode==1002) {
-			activity_webview.loadUrl(getIntent().getExtras().getString("api")+"?token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken());
+			loadUrl();
 		}
 	}
 	
@@ -486,22 +502,41 @@ public class WebInfoActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			if(intent.getAction().equals(OneKiloApplication.refreshWebInfoAction)) {
 				if(intent.getExtras().getInt("hotId")==getIntent().getExtras().getInt("tabId")) {
-					activity_webview.loadUrl(getIntent().getExtras().getString("api")+"?token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken());
+					loadUrl();
 				}
 			}
 		}};
 	
 	public void rotate(boolean forward) {
-		RotateAnimation animation=null;
-		if(forward) {
-			animation=new RotateAnimation(0f, 45f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		if(doAni) {
+			RotateAnimation animation=null;
+			if(forward) {
+				animation=new RotateAnimation(0f, 45f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+			}
+			else {
+				animation=new RotateAnimation(45f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+			}
+			animation.setDuration(300);
+			animation.setFillAfter(true);
+			nav_add_image.setAnimation(animation);
+			animation.startNow();
+		}		
+	}
+	
+	private void loadUrl() {
+		if(getIntent().getExtras().getString("api").indexOf("?")!=-1) {
+			String extra="";
+			if(getIntent().getExtras().getString("groupId")!=null) {
+				extra+="&groupId="+getIntent().getExtras().getString("groupId");
+			}
+			activity_webview.loadUrl(getIntent().getExtras().getString("api")+"&token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken()+extra);				
 		}
 		else {
-			animation=new RotateAnimation(45f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+			String extra="";
+			if(getIntent().getExtras().getString("groupId")!=null) {
+				extra+="&groupId="+getIntent().getExtras().getString("groupId");
+			}
+			activity_webview.loadUrl(getIntent().getExtras().getString("api")+"?token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken()+extra);
 		}
-		animation.setDuration(300);
-		animation.setFillAfter(true);
-		nav_add_image.setAnimation(animation);
-		animation.startNow();
 	}
 }

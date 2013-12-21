@@ -64,6 +64,16 @@ public class AddForm implements Parcelable {
 	 */
 	private String otherParam;
 	
+	private String btnName;
+	
+	public String getBtnName() {
+		return btnName;
+	}
+
+	public void setBtnName(String btnName) {
+		this.btnName = btnName;
+	}
+
 	private int belongId;
 	
 	public int getBelongId() {
@@ -165,6 +175,7 @@ public class AddForm implements Parcelable {
 		dest.writeString(api);
 		dest.writeString(otherParam);
 		dest.writeInt(belongId);
+		dest.writeString(btnName);
 	}
 	
 	public static final Parcelable.Creator<AddForm> CREATOR = new Parcelable.Creator<AddForm>() {
@@ -183,6 +194,7 @@ public class AddForm implements Parcelable {
 			af.api=source.readString();
 			af.otherParam=source.readString();
 			af.belongId=source.readInt();
+			af.btnName=source.readString();
 			return af;
 		}
 

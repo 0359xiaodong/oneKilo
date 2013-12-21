@@ -24,6 +24,7 @@ import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
 import com.morningtel.onekilo.model.Group;
+import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
 
 public class CommunityActivity extends BaseActivity {
@@ -93,22 +94,31 @@ public class CommunityActivity extends BaseActivity {
 				int position_=arg2-1;
 				Intent intent=null;
 				Bundle bundle=new Bundle();
-				if(group_list.get(position_).getTabs().size()==1) {
+				switch(group_list.get(position_).getViewType()) {
+				case Hot.WEBVIEW_VIEWTYPE:
 					intent=new Intent(CommunityActivity.this, WebInfoActivity.class);
 					bundle.putInt("tabId", group_list.get(position_).getTabs().get(0).getId());
 					bundle.putString("hotName", group_list.get(position_).getName());
 					bundle.putInt("needBar", group_list.get(position_).getTabs().get(0).getNeedBar());
 					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
-					bundle.putParcelableArrayList("menu", group_list.get(position_).getMenus());							
-				}
-				else if(group_list.get(position_).getTabs().size()==2) {
+					bundle.putParcelableArrayList("menu", group_list.get(position_).getMenus());	
+					bundle.putString("groupId", group_list.get(position_).getId());
+					bundle.putInt("btnType", group_list.get(position_).getBtnType());
+					break;
+				case Hot.TABWEBVIEW_VIEWTYPE:
 					intent=new Intent(CommunityActivity.this, WebInfoTabActivity.class);
-					for(int k=0;k<2;k++) {
-						System.out.println(group_list.get(position_).getTabs().get(k).getName());
-					}
 					bundle.putParcelableArrayList("tabs", group_list.get(position_).getTabs());
 					bundle.putString("hotName", group_list.get(position_).getName());
 					bundle.putParcelableArrayList("menu", group_list.get(position_).getMenus());
+					bundle.putString("groupId", group_list.get(position_).getId());
+					bundle.putInt("btnType", group_list.get(position_).getBtnType());
+					break;
+				case Hot.LOCATION_VIEWTYPE:
+					break;
+				case Hot.VOICE_VIEWTYPE:
+					break;
+				case Hot.CODE_VIEWTYPE:
+					break;
 				}
 				intent.putExtras(bundle);
 				startActivity(intent);
@@ -159,22 +169,23 @@ public class CommunityActivity extends BaseActivity {
 				super.handleMessage(msg);
 				if(msg.obj==null) {
 					showCustomToast("网络异常，请稍后再试");
-					return;
-				}
-				String str=msg.obj.toString();
-				if(CommonUtils.convertNull(str).equals("")) {
-					showCustomToast("网络异常，请稍后再试");
 				}
 				else {
-					ArrayList<Group> group_list_temp=JsonParse.getCommunicateList(str, CommunityActivity.this);
-					if(group_list_temp==null) {
-						showCustomToast("数据解析异常，请稍后再试");
+					String str=msg.obj.toString();
+					if(CommonUtils.convertNull(str).equals("")) {
+						showCustomToast("网络异常，请稍后再试");
 					}
 					else {
-						group_list.clear();
-						group_list.addAll(group_list_temp);
-						adapter.notifyDataSetChanged();
-					}					
+						ArrayList<Group> group_list_temp=JsonParse.getCommunicateList(str, CommunityActivity.this);
+						if(group_list_temp==null) {
+							showCustomToast("数据解析异常，请稍后再试");
+						}
+						else {
+							group_list.clear();
+							group_list.addAll(group_list_temp);
+							adapter.notifyDataSetChanged();
+						}					
+					}
 				}
 				community_listview.onRefreshComplete();
 				isLoad=false;

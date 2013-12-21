@@ -1,16 +1,46 @@
 package com.morningtel.onekilo.model;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * @hibernate.class table="hot"
+ * @author lhl
+ */
 public class Hot implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	//hot类型
+	//业主hot
 	public static final int YEZHU_HOT = 1;
-	
+	//物业hot
 	public static final int WUYE_HOT = 2;
+	
+	//单击动作类型
+	//普通动作  触发tab界面  资讯
+	public static final int WEBVIEW_VIEWTYPE = 2;
+	// 资讯+资讯
+	public static final int TABWEBVIEW_VIEWTYPE = 5;
+	//定位动作
+	public static final int LOCATION_VIEWTYPE = 11;
+	//音频输入动作
+	public static final int VOICE_VIEWTYPE = 12;
+	//扫码动作
+	public static final int CODE_VIEWTYPE = 13;
+	
+	//长按动作类型
+	//音频输入
+	public static final int VOICE_LONGPRESSTYPE = 22;
+	
+	//btn类型
+	//+号btn
+	public static final int ADD_BUTTONTYPE = 1;
+	//三点更多btn
+	public static final int MORE_BUTTONTYPE = 2;
+	//设置btn
+	public static final int SET_BUTTONTYPE = 3;
 	
 	/**
 	 * @hibernate.id generator-class="native"
@@ -75,7 +105,7 @@ public class Hot implements Serializable {
 	
 	/**
 	 * 视图类型
-	 * 1-论坛   2-资讯    3-论坛+资讯    4-资讯+论坛   5-资讯+资讯   6-论坛+论坛
+	 *2-资讯  5-资讯+资讯
 	 *  @hibernate.property
 	 */
 	private int viewType;
@@ -98,8 +128,21 @@ public class Hot implements Serializable {
 	 */
 	private String messageIconUrl;
 	
+	/**
+	 * 长安动作类型
+	 * @hibernate.property
+	 */
+	private int longPressType;
+	
+	/**
+	 * 右上交按钮的类型
+	 * 1-加号   2-三点   3-设置符号
+	 * @hibernate.property
+	 */
+	private int btnType;
+	
 	// 辅助参数
-	private String String;
+	private String imageUrl;
 	
 	private String messageUrl;
 	
@@ -107,22 +150,14 @@ public class Hot implements Serializable {
 	
 	private ArrayList<Tab> tabs;
 	
-	private String icon;
+	private Tab longPressTab;
+	
+	private File icon;
 
 	private String iconFileName;
 
 	private String iconContentType;
 	
-	private String imageUrl;
-	
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -171,11 +206,11 @@ public class Hot implements Serializable {
 		this.iconUrl = iconUrl;
 	}
 
-	public String getIcon() {
+	public File getIcon() {
 		return icon;
 	}
 
-	public void setIcon(String icon) {
+	public void setIcon(File icon) {
 		this.icon = icon;
 	}
 
@@ -203,12 +238,12 @@ public class Hot implements Serializable {
 		this.hotDesc = hotTopic;
 	}
 	
-	public String getString() {
-		return String;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setString(String String) {
-		this.String = String;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public int getHotForgender() {
@@ -297,5 +332,29 @@ public class Hot implements Serializable {
 
 	public void setHotDesc(String hotDesc) {
 		this.hotDesc = hotDesc;
+	}
+
+	public int getLongPressType() {
+		return longPressType;
+	}
+
+	public void setLongPressType(int longPressType) {
+		this.longPressType = longPressType;
+	}
+
+	public Tab getLongPressTab() {
+		return longPressTab;
+	}
+
+	public void setLongPressTab(Tab longPressTab) {
+		this.longPressTab = longPressTab;
+	}
+
+	public int getBtnType() {
+		return btnType;
+	}
+
+	public void setBtnType(int btnType) {
+		this.btnType = btnType;
 	}
 }

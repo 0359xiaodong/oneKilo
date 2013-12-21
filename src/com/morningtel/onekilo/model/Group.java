@@ -90,6 +90,26 @@ public class Group implements Serializable {
 	private ArrayList<Tab> tabs;
 	
 	private ArrayList<Menu> menus;
+	
+	private int btnType;
+	
+	private int viewType;
+
+	public int getBtnType() {
+		return btnType;
+	}
+
+	public void setBtnType(int btnType) {
+		this.btnType = btnType;
+	}
+
+	public int getViewType() {
+		return viewType;
+	}
+
+	public void setViewType(int viewType) {
+		this.viewType = viewType;
+	}
 
 	public String getId() {
 		return id;

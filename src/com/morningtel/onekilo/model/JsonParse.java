@@ -126,6 +126,7 @@ public class JsonParse {
 			af.setNeedAnonymity(addForm_obj.getString("needAnonymity"));
 			af.setApi(addForm_obj.getString("api"));
 			af.setOtherParam(addForm_obj.getString("otherParam"));
+			af.setBtnName(new String(addForm_obj.getString("btnName").getBytes("iso-8859-1"), "utf-8"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -170,7 +171,6 @@ public class JsonParse {
 			hot.setHotTo(hot_obj.getInt("hotTo"));
 			hot.setHotFor(hot_obj.getInt("hotFor"));
 			hot.setMessageIconUrl(hot_obj.getString("messageIconUrl"));
-			hot.setIcon(hot_obj.getString("icon"));
 			hot.setHotForgender(hot_obj.getInt("hotForgender"));
 			hot.setHotForCity(hot_obj.getInt("hotForCity"));
 			hot.setIconFileName(hot_obj.getString("iconFileName"));
@@ -183,6 +183,8 @@ public class JsonParse {
 			hot.setHotDesc(hot_obj.getString("hotDesc"));
 			hot.setViewType(hot_obj.getInt("viewType"));
 			hot.setNeedBar(hot_obj.getInt("needBar"));
+			hot.setBtnType(hot_obj.getInt("btnType"));
+			hot.setLongPressType(hot_obj.getInt("longPressType"));
 			JSONArray menus_array=hot_obj.getJSONArray("menus");
 			ArrayList<Menu> menus=new ArrayList<Menu>();
 			for(int j=0;j<menus_array.length();j++) {
@@ -209,6 +211,11 @@ public class JsonParse {
 			else {
 				hot.setImageUrl(image_obj.getString("smallImg"));
 			}
+			if(hot_obj.getInt("longPressType")!=0) {
+				JSONObject long_tabs_obj=hot_obj.getJSONObject("longPressTab");
+				Tab long_tab=getTab(long_tabs_obj);
+				hot.setLongPressTab(long_tab);
+			}			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -235,6 +242,8 @@ public class JsonParse {
 			group.setMinType(group_obj.getInt("minType"));
 			group.setCreateDate(group_obj.getInt("createDate"));
 			group.setDescription(new String(CommonUtils.convertNull(group_obj.getString("description")).getBytes("iso-8859-1"), "utf-8"));
+			group.setBtnType(group_obj.getInt("btnType"));
+			group.setViewType(group_obj.getInt("viewType"));
 			JSONArray menus_array=group_obj.getJSONArray("menus");
 			ArrayList<Menu> menus=new ArrayList<Menu>();
 			for(int j=0;j<menus_array.length();j++) {

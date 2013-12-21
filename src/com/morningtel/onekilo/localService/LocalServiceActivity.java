@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
+import com.morningtel.onekilo.voice.VoiceActivity;
 
 public class LocalServiceActivity extends BaseActivity {
 	
@@ -137,26 +139,43 @@ public class LocalServiceActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						Intent intent=null;
 						Bundle bundle=new Bundle();
-						if(hot_list.get(position_).getTabs().size()==1) {
+						switch(hot_list.get(position_).getViewType()) {
+						case Hot.WEBVIEW_VIEWTYPE:
 							intent=new Intent(LocalServiceActivity.this, WebInfoActivity.class);
 							bundle.putInt("tabId", hot_list.get(position_).getTabs().get(0).getId());
 							bundle.putString("hotName", hot_list.get(position_).getHotName());
 							bundle.putInt("needBar", hot_list.get(position_).getTabs().get(0).getNeedBar());
 							bundle.putString("api", hot_list.get(position_).getTabs().get(0).getApi());
-							bundle.putParcelableArrayList("menu", hot_list.get(position_).getMenus());							
-						}
-						else if(hot_list.get(position_).getTabs().size()==2) {
+							bundle.putInt("btnType", hot_list.get(position_).getBtnType());
+							bundle.putParcelableArrayList("menu", hot_list.get(position_).getMenus());
+							break;
+						case Hot.TABWEBVIEW_VIEWTYPE:
 							intent=new Intent(LocalServiceActivity.this, WebInfoTabActivity.class);
-							for(int k=0;k<2;k++) {
-								System.out.println(hot_list.get(position_).getTabs().get(k).getName());
-							}
 							bundle.putParcelableArrayList("tabs", hot_list.get(position_).getTabs());
 							bundle.putString("hotName", hot_list.get(position_).getHotName());
 							bundle.putParcelableArrayList("menu", hot_list.get(position_).getMenus());
+							bundle.putInt("btnType", hot_list.get(position_).getBtnType());
+							break;
+						case Hot.LOCATION_VIEWTYPE:
+							break;
+						case Hot.VOICE_VIEWTYPE:
+							break;
+						case Hot.CODE_VIEWTYPE:
+							break;
 						}
 						intent.putExtras(bundle);
 						startActivity(intent);
 					}});
+				chat_layout_item_image.setOnLongClickListener(new OnLongClickListener() {
+					
+					@Override
+					public boolean onLongClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent=new Intent(LocalServiceActivity.this, VoiceActivity.class);
+						startActivity(intent);
+						return false;
+					}
+				});
 				TextView chat_layout_item_text=(TextView) view_row.findViewById(R.id.chat_layout_item_text);
 				String temp_name=hot_list.get(i*3+j).getHotName();
 				chat_layout_item_text.setText(temp_name);

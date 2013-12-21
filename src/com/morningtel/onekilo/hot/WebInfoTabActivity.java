@@ -6,6 +6,7 @@ import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.addform.AddFormActivity;
 import com.morningtel.onekilo.model.AddForm;
+import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.Menu;
 import com.morningtel.onekilo.model.Tab;
 
@@ -39,6 +40,9 @@ public class WebInfoTabActivity extends TabActivity {
 	//加载的tab数量
 	ArrayList<Tab> tabList=null;
 	
+	//判断是否执行动画效果
+	boolean doAni=false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -47,6 +51,10 @@ public class WebInfoTabActivity extends TabActivity {
 		setContentView(R.layout.activity_webtabmain);
 
 		tabList=getIntent().getExtras().getParcelableArrayList("tabs");
+		
+		if(getIntent().getExtras().getInt("btnType")==Hot.ADD_BUTTONTYPE) {
+			doAni=true;
+		}
 		
 		init();
 	}
@@ -63,6 +71,12 @@ public class WebInfoTabActivity extends TabActivity {
 			}});
 		nav_add_layout=(LinearLayout) findViewById(R.id.nav_add_layout);
 		nav_add_image=(ImageView) findViewById(R.id.nav_add_image);
+		if(doAni) {
+			nav_add_image.setImageResource(R.drawable.nav_choice);
+		}
+		else {
+			nav_add_image.setImageResource(R.drawable.nav_more);
+		}
 		left_tab=(TextView) findViewById(R.id.left_tab);
 		left_tab.setOnClickListener(new TextView.OnClickListener() {
 
@@ -132,6 +146,9 @@ public class WebInfoTabActivity extends TabActivity {
 		bundle.putInt("needBar", tabList.get(tabPos).getNeedBar());
 		bundle.putString("api", tabList.get(tabPos).getApi());
 		bundle.putParcelableArrayList("menu", null);
+		if(getIntent().getExtras().getString("groupId")!=null) {
+			bundle.putString("groupId", getIntent().getExtras().getString("groupId"));
+		}		
 		intent.putExtras(bundle);
 		spec.setContent(intent);
 		spec.setIndicator("", getResources().getDrawable(drawable));
@@ -189,6 +206,9 @@ public class WebInfoTabActivity extends TabActivity {
 			bundle.putInt("needBar", 0);
 			bundle.putString("api", api);
 			bundle.putParcelableArrayList("menu", null);
+			if(getIntent().getExtras().getString("groupId")!=null) {
+				bundle.putString("groupId", getIntent().getExtras().getString("groupId"));
+			}
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1102);
 			break;
@@ -234,16 +254,18 @@ public class WebInfoTabActivity extends TabActivity {
 	}
 	
 	public void rotate(boolean forward) {
-		RotateAnimation animation=null;
-		if(forward) {
-			animation=new RotateAnimation(0f, 45f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-		}
-		else {
-			animation=new RotateAnimation(45f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-		}
-		animation.setDuration(300);
-		animation.setFillAfter(true);
-		nav_add_image.setAnimation(animation);
-		animation.startNow();
+		if(doAni) {
+			RotateAnimation animation=null;
+			if(forward) {
+				animation=new RotateAnimation(0f, 45f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+			}
+			else {
+				animation=new RotateAnimation(45f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+			}
+			animation.setDuration(300);
+			animation.setFillAfter(true);
+			nav_add_image.setAnimation(animation);
+			animation.startNow();
+		}		
 	}
 }

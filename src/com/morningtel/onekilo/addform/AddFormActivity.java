@@ -55,6 +55,8 @@ public class AddFormActivity extends BaseActivity {
 	LinearLayout fatie_menu=null;
 	ImageView fatie_tianjiatupian=null;
 	MyMapView bmapView=null;
+	TextView nav_add_text=null;
+	ImageView nav_add_image=null;
 	
 	//ÉÏ´«Í¼Æ¬
 	ArrayList<ImageItemModel> uploadImages=null;
@@ -148,6 +150,11 @@ public class AddFormActivity extends BaseActivity {
 			}});
 		nav_title=(TextView) findViewById(R.id.nav_title);
 		nav_title.setText(getIntent().getExtras().getString("hotName"));
+		nav_add_text=(TextView) findViewById(R.id.nav_add_text);
+		nav_add_text.setText(af.getBtnName());
+		nav_add_text.setVisibility(View.VISIBLE);
+		nav_add_image=(ImageView) findViewById(R.id.nav_add_image);
+		nav_add_image.setVisibility(View.INVISIBLE);
 		
 		fatie_title=(EditText) findViewById(R.id.fatie_title);
 		if(CommonUtils.convertNull(af.getNeedTitle()).equals("")) {
