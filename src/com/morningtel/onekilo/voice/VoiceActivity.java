@@ -3,6 +3,9 @@ package com.morningtel.onekilo.voice;
 import java.io.File;
 import java.io.IOException;
 
+import net.frakbot.imageviewex.Converters;
+import net.frakbot.imageviewex.ImageViewEx;
+
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -19,7 +22,10 @@ import com.morningtel.onekilo.R;
 public class VoiceActivity extends BaseActivity {
 	
 	TextView voice_record_button=null;
-	TextView voice_play_button=null;
+	TextView voice_stop_button=null;
+	ImageViewEx voice_imageViewEx1=null;
+	ImageViewEx voice_imageViewEx2=null;
+	ImageViewEx voice_imageViewEx3=null;
 	
 	private String fileName="";
 	private MediaRecorder recorder=null;
@@ -39,13 +45,23 @@ public class VoiceActivity extends BaseActivity {
 	}
 	
 	public void init() {
-		voice_play_button=(TextView) findViewById(R.id.voice_play_button);
-		voice_play_button.setOnClickListener(new TextView.OnClickListener() {
+		
+		voice_imageViewEx1=(ImageViewEx) findViewById(R.id.voice_imageViewEx1);
+		voice_imageViewEx1.setSource(Converters.assetToByteArray(getAssets(), "voice_1.gif"));
+		voice_imageViewEx1.setVisibility(View.INVISIBLE);
+		voice_imageViewEx2=(ImageViewEx) findViewById(R.id.voice_imageViewEx2);
+		voice_imageViewEx2.setSource(Converters.assetToByteArray(getAssets(), "voice_2.gif"));
+		voice_imageViewEx2.setVisibility(View.INVISIBLE);
+		voice_imageViewEx3=(ImageViewEx) findViewById(R.id.voice_imageViewEx3);
+		voice_imageViewEx3.setSource(Converters.assetToByteArray(getAssets(), "voice_3.gif"));
+		voice_imageViewEx3.setVisibility(View.INVISIBLE);
+		voice_stop_button=(TextView) findViewById(R.id.voice_stop_button);
+		voice_stop_button.setOnClickListener(new TextView.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				startPlay();
+				finish();
 			}});
 		voice_record_button=(TextView) findViewById(R.id.voice_record_button);
 		voice_record_button.setOnClickListener(new TextView.OnClickListener() {
@@ -64,11 +80,11 @@ public class VoiceActivity extends BaseActivity {
 							e.printStackTrace();
 						}
 					}
-					voice_record_button.setText("停止录音");
+					voice_record_button.setText("说完发送");
 					startRecording();
 				}
 				else {
-					voice_record_button.setText("开始录音");
+					voice_record_button.setText("开始说话");
 					stopRecording();
 				}
 				isStart=!isStart;
@@ -125,6 +141,7 @@ public class VoiceActivity extends BaseActivity {
 	
 	private void stopRecording() {
 		recorder.stop();
+		recorder.reset();
 		recorder.release();
 		recorder=null;
 	}
@@ -135,6 +152,21 @@ public class VoiceActivity extends BaseActivity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
+				if(msg.what<30) {
+					voice_imageViewEx1.setVisibility(View.GONE);
+					voice_imageViewEx2.setVisibility(View.GONE);
+					voice_imageViewEx3.setVisibility(View.VISIBLE);
+				}
+				else if(msg.what>=30&&msg.what<70) {
+					voice_imageViewEx1.setVisibility(View.GONE);
+					voice_imageViewEx2.setVisibility(View.VISIBLE);
+					voice_imageViewEx3.setVisibility(View.GONE);
+				}
+				else if(msg.what>=70) {
+					voice_imageViewEx1.setVisibility(View.VISIBLE);
+					voice_imageViewEx2.setVisibility(View.GONE);
+					voice_imageViewEx3.setVisibility(View.GONE);
+				}
 			}
 		};
 		
@@ -147,8 +179,11 @@ public class VoiceActivity extends BaseActivity {
 				float angle=0;
 				while(true) {
 					if(recorder!=null) {
+						Message m=new Message();
 						angle=100*minAngle*recorder.getMaxAmplitude()/32768;
 						System.out.println(angle);
+						m.what=(int) angle;
+						handler.sendMessage(m);
 					}
 					try {
 						Thread.sleep(400);
@@ -165,13 +200,14 @@ public class VoiceActivity extends BaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		if(isStart) {
+			stopRecording();
+		}
 		isStart=false;
-		
 		if(recorder!=null) { 
 			recorder.release(); 
 			recorder=null; 
-        } 
- 
+        }  
         if (player!=null) { 
         	player.release(); 
         	player=null; 
