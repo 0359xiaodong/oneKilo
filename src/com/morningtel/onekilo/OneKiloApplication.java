@@ -2,6 +2,8 @@ package com.morningtel.onekilo;
 
 import java.io.File;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.MKEvent;
@@ -44,6 +46,9 @@ public class OneKiloApplication extends Application {
         if(!mBMapManager.init(strKey, new MyGeneralListener() {})) {
         	Toast.makeText(getApplicationContext(), "初始化地图引擎失败", Toast.LENGTH_LONG).show();
         }
+        
+        JPushInterface.setDebugMode(true); 	//设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);
 	}
 	
 	public class MyGeneralListener implements MKGeneralListener {

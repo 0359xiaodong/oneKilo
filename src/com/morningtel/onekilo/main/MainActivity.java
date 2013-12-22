@@ -1,5 +1,7 @@
 package com.morningtel.onekilo.main;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.community.CommunityActivity;
@@ -47,6 +49,8 @@ public class MainActivity extends TabActivity {
 		instance=this;
 		
 		CommonUtils.setLoginState(MainActivity.this, CommonUtils.getLoginUser(MainActivity.this).getToken(), true);
+		
+		JPushInterface.resumePush(getApplicationContext());
 		
 		init();
 	}

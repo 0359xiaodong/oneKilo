@@ -7,6 +7,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import cn.jpush.android.api.JPushInterface;
+
 import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
@@ -63,6 +65,8 @@ public class SettingActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				MainActivity.getInstance().loginOut();
+				//极光推送关闭
+				JPushInterface.stopPush(getApplicationContext());
 			}});
 	}
 

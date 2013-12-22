@@ -2,6 +2,8 @@ package com.morningtel.onekilo.localService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +18,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
@@ -92,6 +97,7 @@ public class LocalServiceActivity extends BaseActivity {
 					else {
 						hot_list.addAll(hot_list_temp);
 						addServiceLayoutView();
+						setJpushInfo();
 					}					
 				}
 			}
@@ -200,5 +206,26 @@ public class LocalServiceActivity extends BaseActivity {
 			}
 			service_layout.addView(view_line);
 		}
+	}
+	
+	public void setJpushInfo() {
+		String tag="";
+		for(int i=0;i<hot_list.size();i++) {
+			tag+=hot_list.get(i).getId()+",";
+		}
+		tag=tag.substring(0, tag.length()-1);
+		String[] sArray=tag.split(",");
+		Set<String> tagSet=new LinkedHashSet<String>();
+		for(String sTagItme:sArray) {
+			tagSet.add(sTagItme);
+		}
+		//调用JPush API设置Tag
+		JPushInterface.setAliasAndTags(getApplicationContext(), ((OneKiloApplication) getApplication()).user.getToken(), tagSet, new TagAliasCallback() {
+
+			@Override
+			public void gotResult(int arg0, String arg1, Set<String> arg2) {
+				// TODO Auto-generated method stub
+				System.out.println("极光推送返回"+arg0);
+			}});
 	}
 }
