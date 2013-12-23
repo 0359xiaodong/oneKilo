@@ -52,7 +52,7 @@ public class LocalServiceActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_localservice);
 		
-		bitmapUtils_ser = BitmapHelp.getBitmapUtils(getApplicationContext());
+		bitmapUtils_ser=BitmapHelp.getBitmapUtils(getApplicationContext());
 		bitmapUtils_ser.configDefaultLoadingImage(R.drawable.ser_loading);
 		bitmapUtils_ser.configDefaultLoadFailedImage(R.drawable.ser_loading);
 		bitmapUtils_ser.configDefaultBitmapConfig(Bitmap.Config.RGB_565);
@@ -220,7 +220,7 @@ public class LocalServiceActivity extends BaseActivity {
 			tagSet.add(sTagItme);
 		}
 		//µ˜”√JPush API…Ë÷√Tag
-		JPushInterface.setAliasAndTags(getApplicationContext(), ((OneKiloApplication) getApplication()).user.getToken(), tagSet, new TagAliasCallback() {
+		JPushInterface.setAliasAndTags(getApplicationContext(), ((OneKiloApplication) getApplication()).user.getId(), tagSet, new TagAliasCallback() {
 
 			@Override
 			public void gotResult(int arg0, String arg1, Set<String> arg2) {

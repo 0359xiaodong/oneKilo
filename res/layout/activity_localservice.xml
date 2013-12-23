@@ -6,7 +6,7 @@
     android:background="#e6e6e6" >
     <include 
         layout="@layout/nav_view"/>
-    <ScrollView         
+    <com.morningtel.onekilo.myview.MyScollview         
     	android:layout_width="match_parent"
     	android:layout_height="match_parent"
     	android:fadingEdge="none" >
@@ -17,5 +17,5 @@
 	    	android:orientation="vertical">
 	    	
 		</LinearLayout>
-    </ScrollView>
+    </com.morningtel.onekilo.myview.MyScollview>
 </LinearLayout>
