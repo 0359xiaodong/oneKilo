@@ -77,7 +77,7 @@ public class VoiceActivity extends BaseActivity {
 			}});
 		voice_record_state=(TextView) findViewById(R.id.voice_record_state);
 		voice_record_state.setText("开始说话");
-		fileName=Environment.getExternalStorageDirectory().getPath()+"/onekilo/temp"+"/"+System.currentTimeMillis()+".3gp";
+		fileName=Environment.getExternalStorageDirectory().getPath()+"/onekilo/temp"+"/"+System.currentTimeMillis()+".amr";
 		File file=new File(fileName);
 		if(!file.exists()) {
 			try {
@@ -121,7 +121,7 @@ public class VoiceActivity extends BaseActivity {
 		//设置音源为Micphone  
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		//设置封装格式 
-		recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+		recorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
 		recorder.setOutputFile(fileName);
 		//设置编码格式
 		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);

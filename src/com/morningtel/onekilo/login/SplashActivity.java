@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.morningtel.onekilo.BaseActivity;
+import cn.jpush.android.api.InstrumentedActivity;
+
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends InstrumentedActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

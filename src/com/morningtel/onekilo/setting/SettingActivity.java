@@ -52,6 +52,7 @@ public class SettingActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
 			}});
 		bitmapUtils.display(user_face, CommonUtils.getLoginUser(SettingActivity.this).getImageUrl());
 		user_title=(TextView) findViewById(R.id.user_title);

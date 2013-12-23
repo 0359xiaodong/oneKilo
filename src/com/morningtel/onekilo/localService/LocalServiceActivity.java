@@ -184,16 +184,17 @@ public class LocalServiceActivity extends BaseActivity {
 					@Override
 					public boolean onLongClick(View v) {
 						// TODO Auto-generated method stub
-						switch(hot_list.get(position_).getLongPressTab().getViewType()) {
-						case Hot.VOICE_LONGPRESSTYPE:
-							Intent intent=new Intent(LocalServiceActivity.this, VoiceActivity.class);
-							Bundle bundle=new Bundle();
-							bundle.putString("api", hot_list.get(position_).getLongPressTab().getApi());
-							intent.putExtras(bundle);
-							startActivity(intent);
-							break;
+						if(hot_list.get(position_).getLongPressTab()!=null) {
+							switch(hot_list.get(position_).getLongPressTab().getViewType()) {
+							case Hot.VOICE_LONGPRESSTYPE:
+								Intent intent=new Intent(LocalServiceActivity.this, VoiceActivity.class);
+								Bundle bundle=new Bundle();
+								bundle.putString("api", hot_list.get(position_).getLongPressTab().getApi());
+								intent.putExtras(bundle);
+								startActivity(intent);
+								break;
+							}
 						}
-						
 						return false;
 					}
 				});

@@ -116,17 +116,18 @@ public class JsonParse {
 			if(isFormat) {
 				af.setNeedTitle(new String(addForm_obj.getString("needTitle").getBytes("iso-8859-1"), "utf-8"));
 				af.setNeedContent(new String(addForm_obj.getString("needContent").getBytes("iso-8859-1"), "utf-8"));
+				af.setBtnName(new String(addForm_obj.getString("btnName").getBytes("iso-8859-1"), "utf-8"));
 			}
 			else {
 				af.setNeedTitle(addForm_obj.getString("needTitle"));
 				af.setNeedContent(addForm_obj.getString("needContent"));
+				af.setBtnName(addForm_obj.getString("btnName"));
 			}
 			af.setNeedImage(addForm_obj.getString("needImage"));
 			af.setNeedGeo(addForm_obj.getString("needGeo"));
 			af.setNeedAnonymity(addForm_obj.getString("needAnonymity"));
 			af.setApi(addForm_obj.getString("api"));
 			af.setOtherParam(addForm_obj.getString("otherParam"));
-			af.setBtnName(new String(addForm_obj.getString("btnName").getBytes("iso-8859-1"), "utf-8"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

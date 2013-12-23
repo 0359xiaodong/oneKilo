@@ -112,7 +112,7 @@
         <activity android:name=".message.MessageActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".community.CommunityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
-        <activity android:name=".voice.VoiceActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
+        <activity android:name=".voice.VoiceSignActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:name=".sign.SignActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         
         <service android:name=".service.MusicService"></service>
