@@ -2,6 +2,9 @@ package com.morningtel.onekilo.sign;
 
 import java.util.HashMap;
 
+import net.frakbot.imageviewex.Converters;
+import net.frakbot.imageviewex.ImageViewEx;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +31,7 @@ public class SignActivity extends BaseActivity {
 	TextView geo_record_state=null;
 	TextView geo_record_button=null;
 	TextView geo_stop_button=null;
+	ImageViewEx sign_imageViewEx1=null;
 	
 	OneKiloApplication app=null;
 	
@@ -78,6 +82,9 @@ public class SignActivity extends BaseActivity {
 		mLocClient=new LocationClient(getApplicationContext());
         mLocClient.setAK(((OneKiloApplication) getApplication()).strKey);
         mLocClient.registerLocationListener(myListener);
+        
+        sign_imageViewEx1=(ImageViewEx) findViewById(R.id.sign_imageViewEx1);
+        sign_imageViewEx1.setSource(Converters.assetToByteArray(getAssets(), "sign.gif"));
         
 		geo_record_state=(TextView) findViewById(R.id.geo_record_state);
 		geo_record_state.setText(getIntent().getExtras().getString("hotName"));

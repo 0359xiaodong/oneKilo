@@ -11,9 +11,16 @@
         android:layout_marginLeft="20dip"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"/>
-    <RelativeLayout 
-        android:layout_marginTop="30dip"
+    <net.frakbot.imageviewex.ImageViewEx
         android:layout_below="@id/geo_record_state"
+        android:layout_centerHorizontal="true"
+	    android:id="@+id/sign_imageViewEx1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/ic_launcher"
+	    android:layout_margin="100dip"/>
+    <RelativeLayout 
+        android:layout_below="@id/sign_imageViewEx1"
         android:layout_centerHorizontal="true"        
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content">
@@ -26,7 +33,7 @@
 	        android:paddingLeft="20dip"
 	        android:paddingRight="20dip"
 	        android:textColor="@android:color/white"
-	        android:layout_width="120dip"
+	        android:layout_width="130dip"
 	        android:layout_margin="10dip"
 	        android:gravity="center"
 	        android:layout_height="wrap_content"
@@ -41,7 +48,7 @@
 	        android:paddingBottom="10dip"
 	        android:paddingLeft="20dip"
 	        android:paddingRight="20dip"
-	        android:layout_width="120dip"
+	        android:layout_width="90dip"
 	        android:textColor="@android:color/white"
 	        android:layout_margin="10dip"
 	        android:gravity="center"

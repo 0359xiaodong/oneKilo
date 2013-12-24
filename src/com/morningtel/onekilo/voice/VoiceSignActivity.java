@@ -45,7 +45,6 @@ public class VoiceSignActivity extends BaseActivity {
 			@Override
 			public void getVolumnReceiver(int max) {
 				// TODO Auto-generated method stub
-				System.out.println(max);
 				handler.sendEmptyMessage(max);	
 			}
 		});
@@ -95,20 +94,23 @@ public class VoiceSignActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			int max=msg.what;
-			//以1000为界限，如果超过1000，则开始记录时间
-			if(max>1000&&!isStart) {
+			//以2000为界限，如果超过2000，则开始记录时间
+			if(max>2000&&!isStart) {
 				isStart=true;
 				voice_record_button.setVisibility(View.VISIBLE);
 				recordStartTime=System.currentTimeMillis();
 			}
 			if(isStart) {
 				voice_record_state.setText("正在记录。。。"+(System.currentTimeMillis()-recordStartTime)/1000+"秒");
+				if(System.currentTimeMillis()-recordStartTime<1000) {
+					return;
+				}
 				if(max<5000) {
 					voice_imageViewEx1.setVisibility(View.GONE);
 					voice_imageViewEx2.setVisibility(View.GONE);
 					voice_imageViewEx3.setVisibility(View.VISIBLE);
 				}
-				else if(max>=1000&&max<20000) {
+				else if(max>=10000&&max<20000) {
 					voice_imageViewEx1.setVisibility(View.GONE);
 					voice_imageViewEx2.setVisibility(View.VISIBLE);
 					voice_imageViewEx3.setVisibility(View.GONE);
