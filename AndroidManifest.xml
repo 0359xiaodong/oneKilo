@@ -82,6 +82,7 @@
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    
 
     <application
         android:name=".OneKiloApplication"
@@ -89,10 +90,32 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <!-- 您从百度网站获取的APP KEY -->
+		<meta-data android:name="BaiduMobAd_STAT_ID" android:value="28816c912c" /> 
+		<!-- 渠道商编号 -->
+		<meta-data android:name="BaiduMobAd_CHANNEL" android:value="website" />
+
+		<!-- 是否开启错误日志统计，默认为false -->
+		<meta-data android:name="BaiduMobAd_EXCEPTION_LOG" android:value="true" />
+		<!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
+		<meta-data android:name="BaiduMobAd_SEND_STRATEGY" android:value="APP_START" />
+		<!-- 日志发送策略 为SET_TIME_INTERVAL时，需设定时间间隔(取消下行注释)。取值为1-24的整数，默认为1 -->
+		<!-- <meta-data android:name="BaiduMobAd_TIME_INTERVAL" android:value="1" />  -->
+		<!-- 日志仅在wifi网络下发送，默认为false -->
+		<meta-data android:name="BaiduMobAd_ONLY_WIFI" android:value="false" />
+		<!-- 是否获取基站位置信息 ,默认为true-->
+		<meta-data android:name="BaiduMobAd_CELL_LOCATION" android:value="true" />
+		<!-- 是否获取GPS位置信息，默认为true -->
+		<meta-data android:name="BaiduMobAd_GPS_LOCATION" android:value="true" />
+		<!-- 是否获取WIFI位置信息，默认为true -->
+		<meta-data android:name="BaiduMobAd_WIFI_LOCATION" android:value="true" />
+        
         <activity
             android:name=".login.SplashActivity"
             android:label="@string/app_name" 
             android:screenOrientation="portrait" 
+            android:launchMode="singleInstance"
             android:configChanges="orientation|keyboardHidden|navigation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
