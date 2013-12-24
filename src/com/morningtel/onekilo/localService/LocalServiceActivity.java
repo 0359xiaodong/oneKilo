@@ -33,7 +33,7 @@ import com.morningtel.onekilo.hot.WebInfoTabActivity;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.sign.SignActivity;
-import com.morningtel.onekilo.voice.VoiceActivity;
+import com.morningtel.onekilo.voice.VoiceSignActivity;
 
 public class LocalServiceActivity extends BaseActivity {
 	
@@ -187,7 +187,7 @@ public class LocalServiceActivity extends BaseActivity {
 						if(hot_list.get(position_).getLongPressTab()!=null) {
 							switch(hot_list.get(position_).getLongPressTab().getViewType()) {
 							case Hot.VOICE_LONGPRESSTYPE:
-								Intent intent=new Intent(LocalServiceActivity.this, VoiceActivity.class);
+								Intent intent=new Intent(LocalServiceActivity.this, VoiceSignActivity.class);
 								Bundle bundle=new Bundle();
 								bundle.putString("api", hot_list.get(position_).getLongPressTab().getApi());
 								intent.putExtras(bundle);
