@@ -2,6 +2,7 @@ package com.morningtel.onekilo.common;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -33,6 +34,11 @@ import com.morningtel.onekilo.model.User;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
@@ -68,7 +74,7 @@ public class CommonUtils {
 		return null;
 	}
 	
-	public static String post(String path, HashMap<String, String> map, String[] imageFile, String type) {
+	public static String uploadFile(String path, HashMap<String, String> map, String[] imageFile, String type) {
 		String result="";
 	    HttpClient httpclient = new DefaultHttpClient();
 	    try {
@@ -171,4 +177,97 @@ public class CommonUtils {
 		SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
 		return sp.getBoolean(token, false);
 	}
+	
+	public static String getimageUploadPath(String srcPath, int pos) {  
+        BitmapFactory.Options newOpts=new BitmapFactory.Options();  
+        //开始读入图片，此时把options.inJustDecodeBounds 设回true了  
+        newOpts.inJustDecodeBounds=true;  
+        Bitmap bitmap=BitmapFactory.decodeFile(srcPath,newOpts);//此时返回bm为空            
+        newOpts.inJustDecodeBounds=false;  
+        int w=newOpts.outWidth;  
+        int h=newOpts.outHeight;  
+        //现在主流手机比较多是800*480分辨率，所以高和宽我们设置为  
+        float hh=800f;//这里设置高度为800f  
+        float ww=480f;//这里设置宽度为480f  
+        //缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可  
+        int be=1;//be=1表示不缩放  
+        if (w>h&&w>ww) {//如果宽度大的话根据宽度固定大小缩放  
+            be=(int) (newOpts.outWidth/ww);  
+        } 
+        else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放  
+            be=(int) (newOpts.outHeight / hh);  
+        }  
+        if (be<=0)  
+            be=1;  
+        newOpts.inSampleSize = be;//设置缩放比例  
+        //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了  
+        Bitmap bitmap_new=BitmapFactory.decodeFile(srcPath, newOpts);  
+
+        Matrix m=new Matrix(); 
+        m.setRotate(getExifOrientation(srcPath), bitmap_new.getWidth()/2, bitmap_new.getHeight()/2);
+        Bitmap bitmap_file=Bitmap.createBitmap(bitmap_new, 0, 0, bitmap_new.getWidth(), bitmap_new.getHeight(), m, true);
+        
+        File uploadFile=new File(Environment.getExternalStorageDirectory().getPath()+"/onekilo/temp/temp_"+pos+".jpg");
+        try {
+        	if(!uploadFile.exists()) {
+            	uploadFile.createNewFile();			
+    		}
+    		FileOutputStream fos=new FileOutputStream(uploadFile);
+    		bitmap_file.compress(Bitmap.CompressFormat.JPEG, 30, fos);
+    		fos.flush();
+    		fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+        
+        if(bitmap!=null&&!bitmap.isRecycled()) {
+        	bitmap.recycle();
+        	bitmap=null;
+        }
+        if(bitmap_new!=null&&!bitmap_new.isRecycled()) {
+        	bitmap_new.recycle();
+        	bitmap_new=null;
+        }
+        if(bitmap_file!=null&&!bitmap_file.isRecycled()) {
+        	bitmap_file.recycle();
+        	bitmap_file=null;
+        }
+        return uploadFile.getAbsolutePath();
+    } 
+	
+	/**
+     * 根据图片的文件信息,返回图片的角度;
+     * @param filepath
+     * @return
+     */
+    public static int getExifOrientation(String filepath) {
+        int degree = 0;
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(filepath);
+        } catch (IOException ex) {
+
+        }
+        if (exif != null) {
+            int orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation != -1) {
+                // We only recognize a subset of orientation tag values.
+                switch(orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        degree = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        degree = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        degree = 270;
+                        break;
+                }
+ 
+            }
+        }
+        return degree;
+    }
 }

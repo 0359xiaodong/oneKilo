@@ -98,7 +98,13 @@ public class ImageChoiceActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				finish();
+				if(whole_image_grid.getVisibility()==View.VISIBLE) {
+					whole_image_grid.setVisibility(View.GONE);
+					imagechoice_list.setVisibility(View.VISIBLE);
+				}
+				else {
+					finish();
+				}
 			}});
 		nav_title=(TextView) findViewById(R.id.nav_title);
 		nav_title.setText("ПаІб");

@@ -143,7 +143,7 @@ public class AddFormActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub				
 				uploadForm();
 				finish();
 			}});
@@ -442,13 +442,13 @@ public class AddFormActivity extends BaseActivity {
 				if(uploadImages.size()>0) {
 					String[] imageFile=new String[uploadImages.size()];
 					for(int i=0;i<uploadImages.size();i++) {
-						imageFile[i]=uploadImages.get(i).imagePath;
+						imageFile[i]=CommonUtils.getimageUploadPath(uploadImages.get(i).imagePath, i);
 					}
 					if(af.getOtherParam().equals("")) {
-						m.obj=CommonUtils.post(af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken(), map, imageFile, "image");
+						m.obj=CommonUtils.uploadFile(af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken(), map, imageFile, "image");
 					}
 					else {
-						m.obj=CommonUtils.post(af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken()+"&"+af.getOtherParam(), map, imageFile, "image");
+						m.obj=CommonUtils.uploadFile(af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken()+"&"+af.getOtherParam(), map, imageFile, "image");
 					}
 				}
 				else {
