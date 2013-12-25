@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
 import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
@@ -539,5 +540,15 @@ public class WebInfoActivity extends BaseActivity {
 			}
 			activity_webview.loadUrl(getIntent().getExtras().getString("api")+"?token="+CommonUtils.getLoginUser(WebInfoActivity.this).getToken()+extra);
 		}
+	}
+	
+	public void onResume() {
+		super.onResume();
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
 	}
 }

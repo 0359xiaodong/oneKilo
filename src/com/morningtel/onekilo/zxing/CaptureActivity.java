@@ -46,6 +46,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mobstat.StatService;
 import com.betterman.util.PreferenceConfig;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -145,6 +146,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     decodeFormats = null;
     characterSet = null;
+    
+    StatService.onResume(this);
   }
   
 
@@ -161,6 +164,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       surfaceHolder.removeCallback(this);
     }
     super.onPause();
+    StatService.onPause(this);
   }
 
   @Override
@@ -324,20 +328,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   
   /**
-   * Put up our own UI for how to handle the decoded contents. å¤??????????ç»????
+   * Put up our own UI for how to handle the decoded contents. 
    * @param rawResult
    * @param resultHandler
-   * @param barcode  ??¡ç????????
+   * @param barcode  
    */
   private void handleDecodeInternally(Result rawResult, URIResultHandler resultHandler, Bitmap barcode) {
     statusView.setVisibility(View.GONE);
     viewfinderView.setVisibility(View.GONE);
-    showResult(rawResult, resultHandler, barcode);//dialogå±?ç¤ºç??è¦?ä¿¡æ??
+    showResult(rawResult, resultHandler, barcode);
 
-    //äº?ç»´ç????¼å??  ä¾?ï¼?QR_CODE
    String format =  rawResult.getBarcodeFormat().toString();
    
-   //äº?ç»´ç????????ç»????ç±»å?? ä¾?ï¼? URL
    String type = resultHandler.getType().toString();
     
     //time
@@ -373,9 +375,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
-  /**
-   * ??¸æ?ºä????½ä½¿??¨æ?? å¼¹å?ºæ??ç¤?
-   */
   private void displayFrameworkBugMessageAndExit() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.app_name));

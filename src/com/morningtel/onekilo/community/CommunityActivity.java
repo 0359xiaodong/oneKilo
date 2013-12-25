@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -204,6 +205,16 @@ public class CommunityActivity extends BaseActivity {
 				m.obj=result;
 				handler.sendMessage(m);
 			}}).start();
+	}
+	
+	public void onResume() {
+		super.onResume();
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
 	}
 
 }

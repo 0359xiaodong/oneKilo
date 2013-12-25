@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
 import com.buihha.audiorecorder.Mp3Recorder;
 import com.buihha.audiorecorder.Mp3Recorder.OnVolumnReceiverListener;
 import com.morningtel.onekilo.BaseActivity;
@@ -94,8 +95,8 @@ public class VoiceSignActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			int max=msg.what;
-			//以2000为界限，如果超过2000，则开始记录时间
-			if(max>2000&&!isStart) {
+			//以1000为界限，如果超过1000，则开始记录时间
+			if(max>1000&&!isStart) {
 				isStart=true;
 				voice_record_button.setVisibility(View.VISIBLE);
 				recordStartTime=System.currentTimeMillis();
@@ -128,7 +129,7 @@ public class VoiceSignActivity extends BaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
+		StatService.onResume(this);
 		try {
 			recorder.startRecording();
 		} catch (IOException e) {
@@ -141,6 +142,7 @@ public class VoiceSignActivity extends BaseActivity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		StatService.onPause(this);
 		if(recorder.isRecording()) {
 			try {
 				recorder.stopRecording();

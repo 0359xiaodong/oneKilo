@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import cn.jpush.android.api.JPushInterface;
 
+import com.baidu.mobstat.StatService;
 import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
@@ -69,6 +70,16 @@ public class SettingActivity extends BaseActivity {
 				//极光推送关闭
 				JPushInterface.stopPush(getApplicationContext());
 			}});
+	}
+	
+	public void onResume() {
+		super.onResume();
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
 	}
 
 }

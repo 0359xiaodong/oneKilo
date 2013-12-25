@@ -18,6 +18,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.OverlayItem;
 import com.baidu.mapapi.map.PopupClickListener;
 import com.baidu.mapapi.map.PopupOverlay;
+import com.baidu.mobstat.StatService;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
@@ -194,6 +195,7 @@ public class MappoisActivity extends BaseActivity {
     	 */
     	bmapView.onPause();
         super.onPause();
+        StatService.onPause(this);
     }
     
     @Override
@@ -203,6 +205,7 @@ public class MappoisActivity extends BaseActivity {
     	 */
     	bmapView.onResume();
         super.onResume();
+        StatService.onResume(this);
     }
     
     @Override

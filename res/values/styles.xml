@@ -24,5 +24,33 @@
 	    <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
 	    <item name="android:progressDrawable">@drawable/progress_drawable</item>
 	</style>
+	
+    <style name="MyAnimationActivity">
+        <item name="android:activityOpenEnterAnimation">@anim/enter_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/exit_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/enter_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/exit_right</item>
+        <item name="android:taskOpenEnterAnimation">@anim/enter_right</item>
+        <item name="android:taskOpenExitAnimation">@anim/exit_left</item>
+        <item name="android:taskCloseEnterAnimation">@anim/enter_left</item>
+        <item name="android:taskCloseExitAnimation">@anim/exit_right</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/enter_right</item>
+        <item name="android:taskToFrontExitAnimation">@anim/exit_left</item>
+        <item name="android:taskToBackEnterAnimation">@anim/enter_left</item>
+        <item name="android:taskToBackExitAnimation">@anim/exit_right</item>
+    </style>
+    
+    <style name="ContentOverlay" parent="AppBaseTheme">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/MyAnimationActivity</item>
+    </style>
+    
+    <style name="LoginOverlay" parent="AppBaseTheme">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
 </resources>

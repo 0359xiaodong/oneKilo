@@ -19,6 +19,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
+import com.baidu.mobstat.StatService;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
@@ -215,4 +216,13 @@ public class SignActivity extends BaseActivity {
 		super.onDestroy();
 	}
 	
+	public void onResume() {
+		super.onResume();
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
+	}
 }

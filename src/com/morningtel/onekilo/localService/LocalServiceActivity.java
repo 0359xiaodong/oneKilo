@@ -22,6 +22,7 @@ import android.widget.TextView;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
+import com.baidu.mobstat.StatService;
 import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
@@ -228,5 +229,15 @@ public class LocalServiceActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				System.out.println("自高容僕卦指"+arg0);
 			}});
+	}
+	
+	public void onResume() {
+		super.onResume();
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
 	}
 }

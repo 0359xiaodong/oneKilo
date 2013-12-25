@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
@@ -164,6 +165,16 @@ public class LoginActivity extends BaseActivity {
 				handler.sendMessage(m);
 			}}).start();
 		
+	}
+	
+	public void onResume() {
+		super.onResume();
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		StatService.onPause(this);
 	}
 
 }

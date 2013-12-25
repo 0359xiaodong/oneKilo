@@ -32,6 +32,7 @@ import com.baidu.mapapi.map.MyLocationOverlay;
 import com.baidu.mapapi.map.PopupClickListener;
 import com.baidu.mapapi.map.PopupOverlay;
 import com.baidu.mapapi.map.MyLocationOverlay.LocationMode;
+import com.baidu.mobstat.StatService;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
@@ -355,6 +356,7 @@ public class AddFormActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		bmapView.onResume();
 		super.onResume();
+		StatService.onResume(this);
 	}
 	
 	@Override
@@ -362,6 +364,7 @@ public class AddFormActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		bmapView.onPause();
 		super.onPause();
+		StatService.onPause(this);
 	}
 	
 	@Override
@@ -462,5 +465,5 @@ public class AddFormActivity extends BaseActivity {
 				handler.sendMessage(m);
 			}}).start();
     }
-
+    
 }
