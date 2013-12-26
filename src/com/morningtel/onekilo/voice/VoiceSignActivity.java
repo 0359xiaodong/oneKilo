@@ -1,14 +1,17 @@
 package com.morningtel.onekilo.voice;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import net.frakbot.imageviewex.Converters;
 import net.frakbot.imageviewex.ImageViewEx;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mobstat.StatService;
@@ -16,6 +19,8 @@ import com.buihha.audiorecorder.Mp3Recorder;
 import com.buihha.audiorecorder.Mp3Recorder.OnVolumnReceiverListener;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
+import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.localService.LocalServiceActivity;
 
 public class VoiceSignActivity extends BaseActivity {
 	
@@ -25,6 +30,7 @@ public class VoiceSignActivity extends BaseActivity {
 	ImageViewEx voice_imageViewEx1=null;
 	ImageViewEx voice_imageViewEx2=null;
 	ImageViewEx voice_imageViewEx3=null;
+	ImageView voice_default_image=null;
 	
 	Mp3Recorder recorder=null;
 	
@@ -54,6 +60,7 @@ public class VoiceSignActivity extends BaseActivity {
 	}
 	
 	public void init() {
+		voice_default_image=(ImageView) findViewById(R.id.voice_default_image);
 		voice_imageViewEx1=(ImageViewEx) findViewById(R.id.voice_imageViewEx1);
 		voice_imageViewEx1.setSource(Converters.assetToByteArray(getAssets(), "voice_1.gif"));
 		voice_imageViewEx1.setVisibility(View.INVISIBLE);
@@ -84,6 +91,7 @@ public class VoiceSignActivity extends BaseActivity {
 					e.printStackTrace();
 				}
 				voice_record_state.setText("正在发送");
+				uploadVoice();
 			}});
 		voice_record_state=(TextView) findViewById(R.id.voice_record_state);
 		voice_record_state.setText("开始说话");		
@@ -100,6 +108,7 @@ public class VoiceSignActivity extends BaseActivity {
 				isStart=true;
 				voice_record_button.setVisibility(View.VISIBLE);
 				recordStartTime=System.currentTimeMillis();
+				voice_default_image.setVisibility(View.GONE);
 			}
 			if(isStart) {
 				voice_record_state.setText("正在记录。。。"+(System.currentTimeMillis()-recordStartTime)/1000+"秒");
@@ -124,6 +133,21 @@ public class VoiceSignActivity extends BaseActivity {
 			}	
 		}
 	};
+	
+	public void uploadVoice() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				HashMap<String, String> map=new HashMap<String, String>();
+				map.put("token", CommonUtils.getLoginUser(VoiceSignActivity.this).getToken());
+				String filePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/onekilo/temp/recording.mp3";
+				String result=CommonUtils.uploadFile(getIntent().getExtras().getString("api"), map, new String[]{filePath}, "voice");
+				System.out.println(result);
+			}
+		}).start();
+	}
 	
 	@Override
 	protected void onResume() {

@@ -35,6 +35,7 @@ import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.sign.SignActivity;
 import com.morningtel.onekilo.voice.VoiceSignActivity;
+import com.morningtel.onekilo.zxing.CaptureActivity;
 
 public class LocalServiceActivity extends BaseActivity {
 	
@@ -175,6 +176,9 @@ public class LocalServiceActivity extends BaseActivity {
 						case Hot.VOICE_VIEWTYPE:
 							break;
 						case Hot.CODE_VIEWTYPE:
+							intent=new Intent(LocalServiceActivity.this, CaptureActivity.class);
+							bundle.putString("api", hot_list.get(position_).getTabs().get(0).getApi());
+							bundle.putString("hotName", hot_list.get(position_).getTabs().get(0).getName());
 							break;
 						}
 						intent.putExtras(bundle);

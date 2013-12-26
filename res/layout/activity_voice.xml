@@ -20,19 +20,25 @@
 		    android:id="@+id/voice_imageViewEx1"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:src="@drawable/ic_launcher"/>
+		    android:src="@drawable/voice_default"/>
         <net.frakbot.imageviewex.ImageViewEx
             android:layout_centerHorizontal="true"
 		    android:id="@+id/voice_imageViewEx2"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:src="@drawable/ic_launcher"/>
+		    android:src="@drawable/voice_default"/>
         <net.frakbot.imageviewex.ImageViewEx
             android:layout_centerHorizontal="true"
 		    android:id="@+id/voice_imageViewEx3"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:src="@drawable/ic_launcher"/>
+		    android:src="@drawable/voice_default"/>
+        <ImageView 
+            android:id="@+id/voice_default_image"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/voice_default"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"/>
     </RelativeLayout>
     <RelativeLayout 
         android:layout_below="@id/voice_imageViewEx_layout"

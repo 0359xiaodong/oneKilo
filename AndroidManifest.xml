@@ -185,8 +185,7 @@
         		<category android:name="android.intent.category.BROWSABLE"/>
         		<data android:scheme="zxing" android:host="scan" android:path="/"/>
       		</intent-filter>
-    	</activity>
-    
+    	</activity>    
     	<activity android:name=".zxing.EncodeActivity" android:stateNotNeeded="true" android:theme="@style/ContentOverlay">
       		<intent-filter>
         		<action android:name="com.google.zxing.client.android.ENCODE"/>
@@ -202,8 +201,7 @@
         		<category android:name="android.intent.category.DEFAULT"/>
         		<data android:mimeType="text/plain"/>
       		</intent-filter>
-    	</activity>
-    
+    	</activity>    
     	<activity android:name=".zxing.ShareActivity"
               android:stateNotNeeded="true"
               android:screenOrientation="user"
@@ -213,6 +211,8 @@
         		<category android:name="android.intent.category.DEFAULT"/>
       		</intent-filter>
     	</activity>
+    	<activity android:theme="@style/ContentOverlay" android:name=".zxing.CaptureResultActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
+    	
     	
     	<!-- Required SDK核心功能-->
         <activity

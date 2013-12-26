@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -33,6 +34,7 @@ public class SignActivity extends BaseActivity {
 	TextView geo_record_button=null;
 	TextView geo_stop_button=null;
 	ImageViewEx sign_imageViewEx1=null;
+	ImageView sign_image_fail=null;
 	
 	OneKiloApplication app=null;
 	
@@ -86,6 +88,7 @@ public class SignActivity extends BaseActivity {
         
         sign_imageViewEx1=(ImageViewEx) findViewById(R.id.sign_imageViewEx1);
         sign_imageViewEx1.setSource(Converters.assetToByteArray(getAssets(), "sign.gif"));
+        sign_image_fail=(ImageView) findViewById(R.id.sign_image_fail);
         
 		geo_record_state=(TextView) findViewById(R.id.geo_record_state);
 		geo_record_state.setText(getIntent().getExtras().getString("hotName"));
@@ -98,6 +101,8 @@ public class SignActivity extends BaseActivity {
 				isGPSing=false;
 				geo_record_state.setText(getIntent().getExtras().getString("hotName"));
 				geo_record_button.setVisibility(View.GONE);
+				sign_imageViewEx1.setVisibility(View.VISIBLE);
+				sign_image_fail.setVisibility(View.GONE);
 				setLocationOption();
 			}});
 		geo_stop_button=(TextView) findViewById(R.id.geo_stop_button);
@@ -122,6 +127,8 @@ public class SignActivity extends BaseActivity {
 				if(location==null) {
 					geo_record_state.setText("Ç©µ½Ê§°Ü");
 					geo_record_button.setVisibility(View.VISIBLE);
+					sign_image_fail.setVisibility(View.VISIBLE);
+					sign_imageViewEx1.setVisibility(View.GONE);
 					return;
 				}
 				signUp(""+location.getLongitude()+","+location.getLatitude());
@@ -168,14 +175,24 @@ public class SignActivity extends BaseActivity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
-				String result=JsonParse.isSignOK(msg.obj.toString(), SignActivity.this);
-				boolean isSuccess=result.split(":")[0].equals("1")?true:false;
-				geo_record_state.setText(result.split(":")[1]);
-				if(isSuccess) {					
-					handler_finish.sendEmptyMessageDelayed(0, 3000);
+				if(msg.obj==null) {
+					geo_record_state.setText("Ç©µ½Ê§°Ü");
+					geo_record_button.setVisibility(View.VISIBLE);
+					sign_image_fail.setVisibility(View.VISIBLE);
+					sign_imageViewEx1.setVisibility(View.GONE);
 				}
 				else {
-					geo_record_button.setVisibility(View.VISIBLE);
+					String result=JsonParse.isSignOK(msg.obj.toString(), SignActivity.this);
+					boolean isSuccess=result.split(":")[0].equals("1")?true:false;
+					geo_record_state.setText(result.split(":")[1]);
+					if(isSuccess) {					
+						handler_finish.sendEmptyMessageDelayed(0, 3000);
+					}
+					else {
+						geo_record_button.setVisibility(View.VISIBLE);
+						sign_image_fail.setVisibility(View.VISIBLE);
+						sign_imageViewEx1.setVisibility(View.GONE);
+					}
 				}
 				Intent intent=new Intent(SignActivity.this, MusicService.class);
 				Bundle bundle=new Bundle();

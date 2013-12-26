@@ -11,16 +11,29 @@
         android:layout_marginLeft="20dip"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"/>
-    <net.frakbot.imageviewex.ImageViewEx
-        android:layout_below="@id/geo_record_state"
-        android:layout_centerHorizontal="true"
-	    android:id="@+id/sign_imageViewEx1"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:src="@drawable/ic_launcher"
-	    android:layout_margin="100dip"/>
     <RelativeLayout 
-        android:layout_below="@id/sign_imageViewEx1"
+        android:id="@+id/sign_image_layout"
+        android:layout_below="@id/geo_record_state"       
+        android:layout_centerHorizontal="true"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+	    android:layout_marginTop="100dip"
+	    android:layout_marginBottom="100dip">
+        <net.frakbot.imageviewex.ImageViewEx	         
+		    android:id="@+id/sign_imageViewEx1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:src="@drawable/sign_fail"/>
+        <ImageView         
+		    android:id="@+id/sign_image_fail"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:visibility="gone"
+		    android:src="@drawable/sign_fail"/>
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_below="@id/sign_image_layout"
         android:layout_centerHorizontal="true"        
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content">
