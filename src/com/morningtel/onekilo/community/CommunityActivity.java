@@ -27,7 +27,6 @@ import com.morningtel.onekilo.hot.WebInfoTabActivity;
 import com.morningtel.onekilo.model.Group;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
-import com.morningtel.onekilo.zxing.CaptureActivity;
 
 public class CommunityActivity extends BaseActivity {
 	
@@ -120,9 +119,9 @@ public class CommunityActivity extends BaseActivity {
 				case Hot.VOICE_VIEWTYPE:
 					break;
 				case Hot.CODE_VIEWTYPE:
-					intent=new Intent(CommunityActivity.this, CaptureActivity.class);
-					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
-					bundle.putString("hotName", group_list.get(position_).getTabs().get(0).getName());
+//					intent=new Intent(CommunityActivity.this, CaptureActivity.class);
+//					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
+//					bundle.putString("hotName", group_list.get(position_).getTabs().get(0).getName());
 					break;
 				}
 				intent.putExtras(bundle);

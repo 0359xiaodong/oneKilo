@@ -153,20 +153,19 @@ public class VoiceSignActivity extends BaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		StatService.onResume(this);
 		try {
 			recorder.startRecording();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		StatService.onResume(this);
 	}
 	
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		StatService.onPause(this);
 		if(recorder.isRecording()) {
 			try {
 				recorder.stopRecording();
@@ -175,6 +174,7 @@ public class VoiceSignActivity extends BaseActivity {
 				e.printStackTrace();
 			}
 		}
+		StatService.onPause(this);
 	}
 
 }

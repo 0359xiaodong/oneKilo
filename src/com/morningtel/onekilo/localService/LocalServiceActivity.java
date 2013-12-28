@@ -27,6 +27,7 @@ import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
+import com.morningtel.onekilo.bundle.LauncherActivity;
 import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.hot.WebInfoActivity;
@@ -35,7 +36,6 @@ import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.sign.SignActivity;
 import com.morningtel.onekilo.voice.VoiceSignActivity;
-import com.morningtel.onekilo.zxing.CaptureActivity;
 
 public class LocalServiceActivity extends BaseActivity {
 	
@@ -176,7 +176,7 @@ public class LocalServiceActivity extends BaseActivity {
 						case Hot.VOICE_VIEWTYPE:
 							break;
 						case Hot.CODE_VIEWTYPE:
-							intent=new Intent(LocalServiceActivity.this, CaptureActivity.class);
+							intent=new Intent(LocalServiceActivity.this, LauncherActivity.class);
 							bundle.putString("api", hot_list.get(position_).getTabs().get(0).getApi());
 							bundle.putString("hotName", hot_list.get(position_).getTabs().get(0).getName());
 							break;
