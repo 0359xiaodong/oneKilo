@@ -8,8 +8,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 
+import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.service.MusicService;
+import com.morningtel.onekilo.sign.SignActivity;
 
 public class JsonParse {
 	
@@ -372,6 +377,21 @@ public class JsonParse {
 				return "0:网络异常，请稍后再试";
 			}
 			JSONObject data_obj=obj.getJSONObject("data");
+			//语音提示
+			Intent intent=new Intent(context, MusicService.class);
+			Bundle bundle=new Bundle();
+			if(data_obj.getString("midname").equals("dayu20mi_shibai")) {
+				bundle.putInt("music", R.raw.dayu20mi_shibai);
+			}			
+			else if(data_obj.getString("midname").equals("qiandaochenggong")) {
+				bundle.putInt("music", R.raw.qiandaochenggong);
+			}
+			else if(data_obj.getString("midname").equals("xiaoyu30fenzhong_shibai")) {
+				bundle.putInt("music", R.raw.xiaoyu30fenzhong_shibai);
+			}
+			intent.putExtras(bundle);
+			context.startService(intent);
+			
 			if(data_obj.getInt("result")==1) {
 				return "1:"+new String(data_obj.getString("message").getBytes("iso-8859-1"), "utf-8");
 			}

@@ -252,7 +252,7 @@
         
         <activity
             android:name="org.apkplug.app.apkplugActivity"  
-            android:theme="@android:style/Theme.NoTitleBar"
+            android:theme="@style/LoginOverlay"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>

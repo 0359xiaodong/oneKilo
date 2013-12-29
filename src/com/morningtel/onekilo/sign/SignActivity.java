@@ -5,7 +5,6 @@ import java.util.HashMap;
 import net.frakbot.imageviewex.Converters;
 import net.frakbot.imageviewex.ImageViewEx;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -194,11 +193,6 @@ public class SignActivity extends BaseActivity {
 						sign_imageViewEx1.setVisibility(View.GONE);
 					}
 				}
-				Intent intent=new Intent(SignActivity.this, MusicService.class);
-				Bundle bundle=new Bundle();
-				bundle.putInt("music", R.raw.phonering);
-				intent.putExtras(bundle);
-				startService(intent);
 			}
 		};
 		

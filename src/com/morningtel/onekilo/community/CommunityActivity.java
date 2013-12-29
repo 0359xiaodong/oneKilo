@@ -21,6 +21,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
+import com.morningtel.onekilo.bundle.LauncherActivity;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
@@ -119,9 +120,9 @@ public class CommunityActivity extends BaseActivity {
 				case Hot.VOICE_VIEWTYPE:
 					break;
 				case Hot.CODE_VIEWTYPE:
-//					intent=new Intent(CommunityActivity.this, CaptureActivity.class);
-//					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
-//					bundle.putString("hotName", group_list.get(position_).getTabs().get(0).getName());
+					intent=new Intent(CommunityActivity.this, LauncherActivity.class);
+					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
+					bundle.putString("hotName", group_list.get(position_).getTabs().get(0).getName());
 					break;
 				}
 				intent.putExtras(bundle);

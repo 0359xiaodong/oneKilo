@@ -5,16 +5,5 @@
     android:background="#e6e6e6">
     <include 
      	layout="@layout/nav_view"/>
-    <TextView
-        android:id="@+id/click"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/anniu_bai_sel"
-        android:gravity="center"
-        android:padding="15dip"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:layout_centerInParent="true"
-        android:text="点击进入" />
-
+    
 </RelativeLayout>

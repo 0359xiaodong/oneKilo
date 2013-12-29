@@ -8,13 +8,13 @@ import org.osgi.framework.ServiceReference;
 
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
+import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.community.CommunityActivity;
 
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
 
 public class LauncherActivity extends BaseActivity {
 	
@@ -40,20 +40,12 @@ public class LauncherActivity extends BaseActivity {
 			finish();
         }
         
-        TextView click=(TextView) findViewById(R.id.click);
-        click.setOnClickListener(new TextView.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				try {
-					startActivity("com.google.zxing.client.android.CaptureActivity");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}});
-       
+        try {
+			startActivity("com.google.zxing.client.android.CaptureActivity");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -71,6 +63,11 @@ public class LauncherActivity extends BaseActivity {
     		StartActivity service=(StartActivity) mcontext.getService(reference);
     		if(service!=null){
     			Intent i=new Intent();
+    			Bundle bundle=new Bundle();
+    			bundle.putString("api", getIntent().getExtras().getString("api"));
+				bundle.putString("hotName", getIntent().getExtras().getString("hotName"));
+				bundle.putString("token", CommonUtils.getLoginUser(LauncherActivity.this).getToken());
+				i.putExtras(bundle);
 				i.setClassName(this, ActivityClass);
 				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     			service.StartActivity(mcontext, i);
@@ -79,13 +76,16 @@ public class LauncherActivity extends BaseActivity {
     	}
 	}
     
-    public boolean dispatchKeyEvent(KeyEvent event) {
-		if (event.getKeyCode()==KeyEvent.KEYCODE_BACK) {
-			frame.shutdown();
-			finish();
-			return true;
-		} 
-		return super.dispatchKeyEvent(event);
-	} 
+    boolean isAlreadyStart=false;
     
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	if(isAlreadyStart) {
+    		frame.shutdown();
+			finish();
+    	}
+    	isAlreadyStart=true;
+    }
 }
