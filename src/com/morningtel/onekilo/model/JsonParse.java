@@ -14,7 +14,6 @@ import android.os.Bundle;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.service.MusicService;
-import com.morningtel.onekilo.sign.SignActivity;
 
 public class JsonParse {
 	

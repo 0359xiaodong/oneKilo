@@ -20,7 +20,7 @@ import com.buihha.audiorecorder.Mp3Recorder.OnVolumnReceiverListener;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
-import com.morningtel.onekilo.localService.LocalServiceActivity;
+import com.morningtel.onekilo.model.JsonParse;
 
 public class VoiceSignActivity extends BaseActivity {
 	
@@ -120,12 +120,12 @@ public class VoiceSignActivity extends BaseActivity {
 					voice_imageViewEx2.setVisibility(View.GONE);
 					voice_imageViewEx3.setVisibility(View.VISIBLE);
 				}
-				else if(max>=10000&&max<20000) {
+				else if(max>=10000&&max<15000) {
 					voice_imageViewEx1.setVisibility(View.GONE);
 					voice_imageViewEx2.setVisibility(View.VISIBLE);
 					voice_imageViewEx3.setVisibility(View.GONE);
 				}
-				else if(max>=20000) {
+				else if(max>=15000) {
 					voice_imageViewEx1.setVisibility(View.VISIBLE);
 					voice_imageViewEx2.setVisibility(View.GONE);
 					voice_imageViewEx3.setVisibility(View.GONE);
@@ -134,17 +134,46 @@ public class VoiceSignActivity extends BaseActivity {
 		}
 	};
 	
+	/**
+	 * 上传语音文件
+	 */
 	public void uploadVoice() {
+		final Handler handler_upload=new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				if(msg.obj==null) {
+					showCustomToast("网络异常，请稍后再试");
+					return;
+				}
+				String str=msg.obj.toString();
+				if(CommonUtils.convertNull(str).equals("")) {
+					showCustomToast("网络异常，请稍后再试");
+				}
+				else {
+					if(JsonParse.checkPermission(str, VoiceSignActivity.this)) {
+						showCustomToast("提交成功");
+					}
+					else {
+						showCustomToast("提交失败");
+					}				
+				}
+			}
+		};
+		
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				Message m=new Message();
 				HashMap<String, String> map=new HashMap<String, String>();
 				map.put("token", CommonUtils.getLoginUser(VoiceSignActivity.this).getToken());
 				String filePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/onekilo/temp/recording.mp3";
-				String result=CommonUtils.uploadFile(getIntent().getExtras().getString("api"), map, new String[]{filePath}, "voice");
-				System.out.println(result);
+				String result=CommonUtils.uploadFile(getIntent().getExtras().getString("api"), map, new String[]{filePath}, "audio");
+				m.obj=result;
+				handler_upload.sendMessage(m);
 			}
 		}).start();
 	}

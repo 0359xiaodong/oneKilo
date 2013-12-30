@@ -25,9 +25,11 @@ import com.morningtel.onekilo.bundle.LauncherActivity;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
+import com.morningtel.onekilo.localService.LocalServiceActivity;
 import com.morningtel.onekilo.model.Group;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
+import com.morningtel.onekilo.sign.SignActivity;
 
 public class CommunityActivity extends BaseActivity {
 	
@@ -94,6 +96,10 @@ public class CommunityActivity extends BaseActivity {
 					long arg3) {
 				// TODO Auto-generated method stub
 				int position_=arg2-1;
+				if(group_list.get(position_).getViewType()==Hot.CODE_VIEWTYPE&&android.os.Build.VERSION.SDK_INT<15) {
+					showCustomToast("您的系统版本过低，暂时不支持"+group_list.get(position_).getTabs().get(0).getName()+"功能");
+					return ;
+				}
 				Intent intent=null;
 				Bundle bundle=new Bundle();
 				switch(group_list.get(position_).getViewType()) {
@@ -116,6 +122,9 @@ public class CommunityActivity extends BaseActivity {
 					bundle.putInt("btnType", group_list.get(position_).getBtnType());
 					break;
 				case Hot.LOCATION_VIEWTYPE:
+					intent=new Intent(CommunityActivity.this, SignActivity.class);
+					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
+					bundle.putString("hotName", group_list.get(position_).getTabs().get(0).getName());
 					break;
 				case Hot.VOICE_VIEWTYPE:
 					break;

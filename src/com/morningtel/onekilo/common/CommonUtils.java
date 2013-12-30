@@ -19,7 +19,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -29,6 +28,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.morningtel.onekilo.OneKiloApplication;
+import com.morningtel.onekilo.common.CustomMultiPartEntity.ProgressListener;
 import com.morningtel.onekilo.model.User;
 
 import android.app.Activity;
@@ -74,12 +74,29 @@ public class CommonUtils {
 		return null;
 	}
 	
+	/**
+	 * 上传文件
+	 * @param path
+	 * @param map
+	 * @param imageFile
+	 * @param type
+	 * @return
+	 */
 	public static String uploadFile(String path, HashMap<String, String> map, String[] imageFile, String type) {
 		String result="";
 	    HttpClient httpclient = new DefaultHttpClient();
+	    long totalSize=0;
+	    for(int i=0;i<imageFile.length;i++) {
+	    	totalSize+=new File(imageFile[i]).length();
+	    }
+	    final long temp=totalSize;
 	    try {
 	        HttpPost httppost = new HttpPost(path);
-	        MultipartEntity reqEntity = new MultipartEntity();
+	        CustomMultiPartEntity reqEntity = new CustomMultiPartEntity(new ProgressListener() {  
+                public void transferred(long num) {  
+                    System.out.println((int) ((num /(float) temp)*100));  
+                }  
+            });
 	        Iterator<Entry<String, String>> it=map.entrySet().iterator();
 	        while(it.hasNext()) {
 	        	Entry<String, String> entry=it.next();
@@ -101,7 +118,6 @@ public class CommonUtils {
 	        	}	 
 	        	resEntity.consumeContent();
 	        }
-	        //EntityUtils.consume(resEntity);
 	        result=new String(result.getBytes("utf-8"), "iso-8859-1");
 	    } catch(Exception e) {
 	    	result=null;

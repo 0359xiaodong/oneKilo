@@ -149,6 +149,10 @@ public class LocalServiceActivity extends BaseActivity {
 					@Override
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
+						if(hot_list.get(position_).getViewType()==Hot.CODE_VIEWTYPE&&android.os.Build.VERSION.SDK_INT<15) {
+							showCustomToast("您的系统版本过低，暂时不支持"+hot_list.get(position_).getTabs().get(0).getName()+"功能");
+							return ;
+						}
 						Intent intent=null;
 						Bundle bundle=new Bundle();
 						switch(hot_list.get(position_).getViewType()) {
