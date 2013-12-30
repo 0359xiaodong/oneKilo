@@ -1,26 +1,19 @@
 package com.morningtel.onekilo.common;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
@@ -28,7 +21,6 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.morningtel.onekilo.OneKiloApplication;
-import com.morningtel.onekilo.common.CustomMultiPartEntity.ProgressListener;
 import com.morningtel.onekilo.model.User;
 
 import android.app.Activity;
@@ -72,59 +64,6 @@ public class CommonUtils {
 			e.printStackTrace();
 		} 
 		return null;
-	}
-	
-	/**
-	 * 上传文件
-	 * @param path
-	 * @param map
-	 * @param imageFile
-	 * @param type
-	 * @return
-	 */
-	public static String uploadFile(String path, HashMap<String, String> map, String[] imageFile, String type) {
-		String result="";
-	    HttpClient httpclient = new DefaultHttpClient();
-	    long totalSize=0;
-	    for(int i=0;i<imageFile.length;i++) {
-	    	totalSize+=new File(imageFile[i]).length();
-	    }
-	    final long temp=totalSize;
-	    try {
-	        HttpPost httppost = new HttpPost(path);
-	        CustomMultiPartEntity reqEntity = new CustomMultiPartEntity(new ProgressListener() {  
-                public void transferred(long num) {  
-                    System.out.println((int) ((num /(float) temp)*100));  
-                }  
-            });
-	        Iterator<Entry<String, String>> it=map.entrySet().iterator();
-	        while(it.hasNext()) {
-	        	Entry<String, String> entry=it.next();
-	        	reqEntity.addPart(entry.getKey(), new StringBody(entry.getValue(), Charset.forName("utf-8")));
-	        }
-	        for(int i=0;i<imageFile.length;i++) {
-	        	reqEntity.addPart(type, new FileBody(new File(imageFile[i])));
-            }
-	        httppost.setEntity(reqEntity);
-	        httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
-	        httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
-	        HttpResponse response = httpclient.execute(httppost);
-	        HttpEntity resEntity = response.getEntity();
-	        if (resEntity != null) {	        	
-	        	BufferedReader reader = new BufferedReader(new InputStreamReader(resEntity.getContent()));
-	        	String line = "";
-	        	while((line = reader.readLine()) != null) {
-	        		result+=line;
-	        	}	 
-	        	resEntity.consumeContent();
-	        }
-	        result=new String(result.getBytes("utf-8"), "iso-8859-1");
-	    } catch(Exception e) {
-	    	result=null;
-	    } finally {
-	    	httpclient.getConnectionManager().shutdown();
-	    }
-	    return result;
 	}
 	
 	public static String convertNull(String returnValue) {

@@ -42,7 +42,9 @@ import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.model.AddForm;
 import com.morningtel.onekilo.model.ImageItemModel;
+import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.myview.MyMapView;
+import com.morningtel.onekilo.service.UploadService;
 
 public class AddFormActivity extends BaseActivity {
 	
@@ -144,8 +146,13 @@ public class AddFormActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub				
-				uploadForm();
+				// TODO Auto-generated method stub		
+				if(uploadImages.size()>0) {
+					uploadWithFile();
+				}
+				else {
+					uploadWithOutFile();
+				}
 				finish();
 			}});
 		nav_title=(TextView) findViewById(R.id.nav_title);
@@ -413,13 +420,63 @@ public class AddFormActivity extends BaseActivity {
 		}
 	}
     
-    private void uploadForm() {
+    /**
+     * 有文件时得发送
+     */
+    private void uploadWithFile() {
+    	Intent intent=new Intent(AddFormActivity.this, UploadService.class);
+    	Bundle bundle=new Bundle();
+   		if(!CommonUtils.convertNull(af.getNeedTitle()).equals("")) {
+   			bundle.putString("title", fatie_title.getText().toString());
+		}
+		if(!CommonUtils.convertNull(af.getNeedContent()).equals("")) {
+			bundle.putString("content", fatie_text.getText().toString());
+		}
+		if(!CommonUtils.convertNull(af.getNeedMap()).equals("")) {
+			bundle.putString("mapGeo", ""+locData.longitude+","+locData.latitude);
+		}
+		else if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
+			bundle.putString("geo", ""+locData.longitude+","+locData.latitude);
+		}
+		String[] imageFile=new String[uploadImages.size()];
+		for(int i=0;i<uploadImages.size();i++) {
+			imageFile[i]=CommonUtils.getimageUploadPath(uploadImages.get(i).imagePath, i);
+		}
+		bundle.putStringArray("filePath", imageFile);
+		bundle.putString("token", CommonUtils.getLoginUser(AddFormActivity.this).getToken());
+		bundle.putString("type", "image");
+		if(af.getOtherParam().equals("")) {
+			bundle.putString("path", af.getApi());
+		}
+		else {
+			bundle.putString("path", af.getApi()+"?"+af.getOtherParam());
+		}
+		bundle.putString("uploadType", "addForm");
+		intent.putExtras(bundle);
+		startService(intent);
+    }
+    
+    /**
+     * 没有文件时得发送
+     */
+    private void uploadWithOutFile() {
     	final Handler handler=new Handler() {
     		@Override
     		public void handleMessage(Message msg) {
     			// TODO Auto-generated method stub
     			super.handleMessage(msg);
-    			//String result=msg.obj.toString();
+    			String str=msg.obj.toString();
+				if(CommonUtils.convertNull(str).equals("")) {
+					CommonUtils.showCustomToast(AddFormActivity.this, "网络异常，请稍后再试");
+				}
+				else {
+					if(JsonParse.checkPermission(str, AddFormActivity.this)) {
+						CommonUtils.showCustomToast(AddFormActivity.this, "提交成功");
+					}
+					else {
+						CommonUtils.showCustomToast(AddFormActivity.this, "提交失败");
+					}				
+				}
     		}
     	};
     	
@@ -439,28 +496,14 @@ public class AddFormActivity extends BaseActivity {
 				if(!CommonUtils.convertNull(af.getNeedMap()).equals("")) {
 					map.put("mapGeo", ""+locData.longitude+","+locData.latitude);
 				}
-				else if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
+				if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
 					map.put("geo", ""+locData.longitude+","+locData.latitude);
 				}
-				if(uploadImages.size()>0) {
-					String[] imageFile=new String[uploadImages.size()];
-					for(int i=0;i<uploadImages.size();i++) {
-						imageFile[i]=CommonUtils.getimageUploadPath(uploadImages.get(i).imagePath, i);
-					}
-					if(af.getOtherParam().equals("")) {
-						m.obj=CommonUtils.uploadFile(af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken(), map, imageFile, "image");
-					}
-					else {
-						m.obj=CommonUtils.uploadFile(af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken()+"&"+af.getOtherParam(), map, imageFile, "image");
-					}
+				if(af.getOtherParam().equals("")) {
+					m.obj=CommonUtils.getWebData(map, af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken());
 				}
 				else {
-					if(af.getOtherParam().equals("")) {
-						m.obj=CommonUtils.getWebData(map, af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken());
-					}
-					else {
-						m.obj=CommonUtils.getWebData(map, af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken()+"&"+af.getOtherParam());
-					}
+					m.obj=CommonUtils.getWebData(map, af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken()+"&"+af.getOtherParam());
 				}
 				handler.sendMessage(m);
 			}}).start();

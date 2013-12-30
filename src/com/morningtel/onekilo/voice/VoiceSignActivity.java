@@ -1,10 +1,10 @@
 package com.morningtel.onekilo.voice;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import net.frakbot.imageviewex.Converters;
 import net.frakbot.imageviewex.ImageViewEx;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,7 +20,7 @@ import com.buihha.audiorecorder.Mp3Recorder.OnVolumnReceiverListener;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
-import com.morningtel.onekilo.model.JsonParse;
+import com.morningtel.onekilo.service.UploadService;
 
 public class VoiceSignActivity extends BaseActivity {
 	
@@ -91,7 +91,19 @@ public class VoiceSignActivity extends BaseActivity {
 					e.printStackTrace();
 				}
 				voice_record_state.setText("正在发送");
-				uploadVoice();
+				finish();
+				
+				Intent intent=new Intent(VoiceSignActivity.this, UploadService.class);
+				Bundle bundle=new Bundle();
+				bundle.putString("token", CommonUtils.getLoginUser(VoiceSignActivity.this).getToken());
+				bundle.putString("path", getIntent().getExtras().getString("api"));
+				String filePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/onekilo/temp/recording.mp3";
+				bundle.putStringArray("filePath", new String[]{filePath});
+				bundle.putString("type", "audio");
+				bundle.putString("uploadType", "voiceSign");
+				intent.putExtras(bundle);
+				startService(intent);
+
 			}});
 		voice_record_state=(TextView) findViewById(R.id.voice_record_state);
 		voice_record_state.setText("开始说话");		
@@ -133,50 +145,6 @@ public class VoiceSignActivity extends BaseActivity {
 			}	
 		}
 	};
-	
-	/**
-	 * 上传语音文件
-	 */
-	public void uploadVoice() {
-		final Handler handler_upload=new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
-				super.handleMessage(msg);
-				if(msg.obj==null) {
-					showCustomToast("网络异常，请稍后再试");
-					return;
-				}
-				String str=msg.obj.toString();
-				if(CommonUtils.convertNull(str).equals("")) {
-					showCustomToast("网络异常，请稍后再试");
-				}
-				else {
-					if(JsonParse.checkPermission(str, VoiceSignActivity.this)) {
-						showCustomToast("提交成功");
-					}
-					else {
-						showCustomToast("提交失败");
-					}				
-				}
-			}
-		};
-		
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				Message m=new Message();
-				HashMap<String, String> map=new HashMap<String, String>();
-				map.put("token", CommonUtils.getLoginUser(VoiceSignActivity.this).getToken());
-				String filePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/onekilo/temp/recording.mp3";
-				String result=CommonUtils.uploadFile(getIntent().getExtras().getString("api"), map, new String[]{filePath}, "audio");
-				m.obj=result;
-				handler_upload.sendMessage(m);
-			}
-		}).start();
-	}
 	
 	@Override
 	protected void onResume() {
