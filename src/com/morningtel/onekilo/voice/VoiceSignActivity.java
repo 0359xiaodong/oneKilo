@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import net.frakbot.imageviewex.Converters;
 import net.frakbot.imageviewex.ImageViewEx;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -18,9 +17,10 @@ import com.baidu.mobstat.StatService;
 import com.buihha.audiorecorder.Mp3Recorder;
 import com.buihha.audiorecorder.Mp3Recorder.OnVolumnReceiverListener;
 import com.morningtel.onekilo.BaseActivity;
+import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
-import com.morningtel.onekilo.service.UploadService;
+import com.morningtel.onekilo.common.UploadWithFileTask;
 
 public class VoiceSignActivity extends BaseActivity {
 	
@@ -93,17 +93,17 @@ public class VoiceSignActivity extends BaseActivity {
 				voice_record_state.setText("正在发送");
 				finish();
 				
-				Intent intent=new Intent(VoiceSignActivity.this, UploadService.class);
-				Bundle bundle=new Bundle();
-				bundle.putString("token", CommonUtils.getLoginUser(VoiceSignActivity.this).getToken());
-				bundle.putString("path", getIntent().getExtras().getString("api"));
+				UploadWithFileTask task=new UploadWithFileTask();
+				task.setToken(CommonUtils.getLoginUser(VoiceSignActivity.this).getToken());
+				task.setPath(getIntent().getExtras().getString("api"));
 				String filePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/onekilo/temp/recording.mp3";
-				bundle.putStringArray("filePath", new String[]{filePath});
-				bundle.putString("type", "audio");
-				bundle.putString("uploadType", "voiceSign");
-				intent.putExtras(bundle);
-				startService(intent);
-
+				task.setFilePath(new String[]{filePath});
+				task.setType("audio");
+				task.setUploadType("voiceSign");
+				task.setContext(VoiceSignActivity.this);
+				task.setNotifyId(((OneKiloApplication) getApplicationContext()).no_num);
+				((OneKiloApplication) getApplicationContext()).no_num++;
+				task.execute();
 			}});
 		voice_record_state=(TextView) findViewById(R.id.voice_record_state);
 		voice_record_state.setText("开始说话");		

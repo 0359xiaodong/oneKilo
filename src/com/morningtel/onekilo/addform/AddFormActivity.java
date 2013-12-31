@@ -1,13 +1,10 @@
 package com.morningtel.onekilo.addform;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -40,11 +37,11 @@ import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.common.UploadWithFileTask;
+import com.morningtel.onekilo.common.UploadWithOutFileTask;
 import com.morningtel.onekilo.model.AddForm;
 import com.morningtel.onekilo.model.ImageItemModel;
-import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.myview.MyMapView;
-import com.morningtel.onekilo.service.UploadService;
 
 public class AddFormActivity extends BaseActivity {
 	
@@ -424,89 +421,68 @@ public class AddFormActivity extends BaseActivity {
      * 有文件时得发送
      */
     private void uploadWithFile() {
-    	Intent intent=new Intent(AddFormActivity.this, UploadService.class);
-    	Bundle bundle=new Bundle();
+    	UploadWithFileTask task=new UploadWithFileTask();
    		if(!CommonUtils.convertNull(af.getNeedTitle()).equals("")) {
-   			bundle.putString("title", fatie_title.getText().toString());
+   			task.setTitle(fatie_title.getText().toString());
 		}
 		if(!CommonUtils.convertNull(af.getNeedContent()).equals("")) {
-			bundle.putString("content", fatie_text.getText().toString());
+			task.setContent(fatie_text.getText().toString());
 		}
 		if(!CommonUtils.convertNull(af.getNeedMap()).equals("")) {
-			bundle.putString("mapGeo", ""+locData.longitude+","+locData.latitude);
+			task.setMapGeo(""+locData.longitude+","+locData.latitude);
 		}
 		else if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
-			bundle.putString("geo", ""+locData.longitude+","+locData.latitude);
+			task.setGeo(""+locData.longitude+","+locData.latitude);
 		}
 		String[] imageFile=new String[uploadImages.size()];
 		for(int i=0;i<uploadImages.size();i++) {
 			imageFile[i]=CommonUtils.getimageUploadPath(uploadImages.get(i).imagePath, i);
 		}
-		bundle.putStringArray("filePath", imageFile);
-		bundle.putString("token", CommonUtils.getLoginUser(AddFormActivity.this).getToken());
-		bundle.putString("type", "image");
+		task.setFilePath(imageFile);
+		task.setToken(CommonUtils.getLoginUser(AddFormActivity.this).getToken());
+		task.setType("image");
 		if(af.getOtherParam().equals("")) {
-			bundle.putString("path", af.getApi());
+			task.setPath(af.getApi());
 		}
 		else {
-			bundle.putString("path", af.getApi()+"?"+af.getOtherParam());
+			task.setPath(af.getApi()+"?"+af.getOtherParam());
 		}
-		bundle.putString("uploadType", "addForm");
-		intent.putExtras(bundle);
-		startService(intent);
+		task.setUploadType("addForm");
+		task.setContext(AddFormActivity.this);
+		task.setNotifyId(((OneKiloApplication) getApplicationContext()).no_num);
+		((OneKiloApplication) getApplicationContext()).no_num++;
+		task.execute();
     }
     
     /**
      * 没有文件时得发送
      */
     private void uploadWithOutFile() {
-    	final Handler handler=new Handler() {
-    		@Override
-    		public void handleMessage(Message msg) {
-    			// TODO Auto-generated method stub
-    			super.handleMessage(msg);
-    			String str=msg.obj.toString();
-				if(CommonUtils.convertNull(str).equals("")) {
-					CommonUtils.showCustomToast(AddFormActivity.this, "网络异常，请稍后再试");
-				}
-				else {
-					if(JsonParse.checkPermission(str, AddFormActivity.this)) {
-						CommonUtils.showCustomToast(AddFormActivity.this, "提交成功");
-					}
-					else {
-						CommonUtils.showCustomToast(AddFormActivity.this, "提交失败");
-					}				
-				}
-    		}
-    	};
     	
-    	new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				Message m=new Message();
-				HashMap<String, String> map=new HashMap<String, String>();
-				if(!CommonUtils.convertNull(af.getNeedTitle()).equals("")) {
-					map.put("title", fatie_title.getText().toString());
-				}
-				if(!CommonUtils.convertNull(af.getNeedContent()).equals("")) {
-					map.put("content", fatie_text.getText().toString());
-				}
-				if(!CommonUtils.convertNull(af.getNeedMap()).equals("")) {
-					map.put("mapGeo", ""+locData.longitude+","+locData.latitude);
-				}
-				if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
-					map.put("geo", ""+locData.longitude+","+locData.latitude);
-				}
-				if(af.getOtherParam().equals("")) {
-					m.obj=CommonUtils.getWebData(map, af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken());
-				}
-				else {
-					m.obj=CommonUtils.getWebData(map, af.getApi()+"?token="+CommonUtils.getLoginUser(AddFormActivity.this).getToken()+"&"+af.getOtherParam());
-				}
-				handler.sendMessage(m);
-			}}).start();
+    	UploadWithOutFileTask task=new UploadWithOutFileTask();
+   		if(!CommonUtils.convertNull(af.getNeedTitle()).equals("")) {
+   			task.setTitle(fatie_title.getText().toString());
+		}
+		if(!CommonUtils.convertNull(af.getNeedContent()).equals("")) {
+			task.setContent(fatie_text.getText().toString());
+		}
+		if(!CommonUtils.convertNull(af.getNeedMap()).equals("")) {
+			task.setMapGeo(""+locData.longitude+","+locData.latitude);
+		}
+		else if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
+			task.setGeo(""+locData.longitude+","+locData.latitude);
+		}
+		task.setToken(CommonUtils.getLoginUser(AddFormActivity.this).getToken());
+		if(af.getOtherParam().equals("")) {
+			task.setUrl(af.getApi());
+		}
+		else {
+			task.setUrl(af.getApi()+"?"+af.getOtherParam());
+		}
+		task.setContext(AddFormActivity.this);
+		task.setNotifyId(((OneKiloApplication) getApplicationContext()).no_num);
+		((OneKiloApplication) getApplicationContext()).no_num++;
+		task.execute();
     }
     
 }

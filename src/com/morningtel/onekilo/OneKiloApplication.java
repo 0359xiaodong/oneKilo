@@ -19,6 +19,8 @@ public class OneKiloApplication extends Application {
 	public String strKey="HaajpyDaUMB7EryGVRuu7bYz";
 	public boolean isAppOpen=false;
 	public static final String refreshWebInfoAction="refreshWebInfoAction";
+	//Í¨ÖªÀ¸notifyÐòºÅ
+	public int no_num=0;
 	
 	public BMapManager mBMapManager=null;
 	

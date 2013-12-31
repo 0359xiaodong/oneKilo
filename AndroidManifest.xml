@@ -143,9 +143,9 @@
         <activity android:theme="@style/ContentOverlay" android:name=".setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:theme="@style/ContentOverlay" android:name=".voice.VoiceSignActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         <activity android:theme="@style/ContentOverlay" android:name=".sign.SignActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
+        <activity android:name=".common.NotificationActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden|navigation"></activity>       
         
         <service android:name=".service.MusicService"></service>
-        <service android:name=".service.UploadService"></service>
         
         <service
             android:name="com.baidu.location.f"
