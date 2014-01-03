@@ -6,7 +6,6 @@ import com.morningtel.onekilo.common.CommonUtils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class BaseActivity extends Activity {
 	

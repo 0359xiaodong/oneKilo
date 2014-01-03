@@ -25,7 +25,6 @@ import com.morningtel.onekilo.bundle.LauncherActivity;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
-import com.morningtel.onekilo.localService.LocalServiceActivity;
 import com.morningtel.onekilo.model.Group;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;

@@ -140,23 +140,25 @@ public class ImageChoiceActivity extends BaseActivity {
 					intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, cameraUrl);
 					startActivityForResult(intent, 100);
 				}
-				else {					
+				else {	
+					ImageView whole_image_isselect=(ImageView) arg1.findViewById(R.id.whole_image_isselect);
 					if(recent_imageItemModelList.get(arg2).isSelected==0) {
 						if(checkAddPermit()) {
 							image_add_commit.startAnimation(AnimationUtils.loadAnimation(ImageChoiceActivity.this, R.anim.shakex));
 							return ;
 						}
 						else {
+							whole_image_isselect.setVisibility(View.VISIBLE);
 							recent_imageItemModelList.get(arg2).isSelected=1;	
 							choiceImageList.add(recent_imageItemModelList.get(arg2));		
 						}									
 					}
 					else {
+						whole_image_isselect.setVisibility(View.GONE);
 						recent_imageItemModelList.get(arg2).isSelected=0;
 						choiceImageList.remove(recent_imageItemModelList.get(arg2));					
 					}
 					addCommitLayout();
-					recent_adapter.notifyDataSetChanged();
 				}			
 			}
 		});
@@ -192,7 +194,8 @@ public class ImageChoiceActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub				
+				// TODO Auto-generated method stub	
+				ImageView whole_image_isselect=(ImageView) view.findViewById(R.id.whole_image_isselect);
 				if(imageItemModelList.get(position).isSelected==0) {
 					if(checkAddPermit()) {
 						image_add_commit.startAnimation(AnimationUtils.loadAnimation(ImageChoiceActivity.this, R.anim.shakex));
@@ -201,14 +204,15 @@ public class ImageChoiceActivity extends BaseActivity {
 					else {
 						imageItemModelList.get(position).isSelected=1;	
 						choiceImageList.add(imageItemModelList.get(position));
+						whole_image_isselect.setVisibility(View.VISIBLE);
 					}					
 				}
 				else {
 					imageItemModelList.get(position).isSelected=0;
 					choiceImageList.remove(imageItemModelList.get(position));
+					whole_image_isselect.setVisibility(View.GONE);
 				}
 				addCommitLayout();
-				adapter_.notifyDataSetChanged();
 				if(recent_imageItemModelList.contains(imageItemModelList.get(position))) {
 					recent_adapter.notifyDataSetChanged();
 				}
