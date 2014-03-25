@@ -9,6 +9,8 @@ import com.morningtel.onekilo.localService.LocalServiceActivity;
 import com.morningtel.onekilo.login.LoginActivity;
 import com.morningtel.onekilo.message.MessageActivity;
 import com.morningtel.onekilo.setting.SettingActivity;
+import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushManager;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -51,6 +53,19 @@ public class MainActivity extends TabActivity {
 		CommonUtils.setLoginState(MainActivity.this, CommonUtils.getLoginUser(MainActivity.this).getToken(), true);
 		
 		JPushInterface.resumePush(getApplicationContext());
+		XGPushManager.registerPush(getApplicationContext(), CommonUtils.getLoginUser(MainActivity.this).getId(), new XGIOperateCallback() {
+
+			@Override
+			public void onFail(Object arg0, int arg1, String arg2) {
+				// TODO Auto-generated method stub
+				System.out.println("注册失败，错误码：" + arg1 + ",错误信息：" + arg2);
+			}
+
+			@Override
+			public void onSuccess(Object arg0, int arg1) {
+				// TODO Auto-generated method stub
+				System.out.println("注册成功，设备token为：" + arg0+", 账号为："+CommonUtils.getLoginUser(MainActivity.this).getId());
+			}});
 		
 		init();
 	}

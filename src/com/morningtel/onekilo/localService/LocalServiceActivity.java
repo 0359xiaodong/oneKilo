@@ -36,6 +36,7 @@ import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.sign.SignActivity;
 import com.morningtel.onekilo.voice.VoiceSignActivity;
+import com.tencent.android.tpush.XGPushManager;
 
 public class LocalServiceActivity extends BaseActivity {
 	
@@ -237,6 +238,9 @@ public class LocalServiceActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				System.out.println("自高容僕卦指"+arg0);
 			}});
+		XGPushManager.setTag(getApplicationContext(), ((OneKiloApplication) getApplication()).user.getId());
+		XGPushManager.setTag(getApplicationContext(), "joelliu");
+		XGPushManager.setTag(getApplicationContext(), "phone");
 	}
 	
 	public void onResume() {

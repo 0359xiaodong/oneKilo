@@ -16,6 +16,7 @@ import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.main.MainActivity;
+import com.tencent.android.tpush.XGPushManager;
 
 public class SettingActivity extends BaseActivity {
 	
@@ -69,6 +70,7 @@ public class SettingActivity extends BaseActivity {
 				MainActivity.getInstance().loginOut();
 				//极光推送关闭
 				JPushInterface.stopPush(getApplicationContext());
+				XGPushManager.unregisterPush(getApplicationContext());
 			}});
 	}
 	

@@ -28,6 +28,7 @@ import com.morningtel.onekilo.common.DES;
 import com.morningtel.onekilo.main.MainActivity;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.model.User;
+import com.tencent.android.tpush.XGPushManager;
 
 public class LoginActivity extends BaseActivity {
 	

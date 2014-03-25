@@ -306,17 +306,19 @@ public class JsonParse {
 			user.setUserType(data_obj.getInt("userType"));
 			user.setId(data_obj.getString("id"));
 			user.setToken(data_obj.getString("token"));
-			JSONObject image_obj=data_obj.getJSONObject("imageUrl");
-			if(CommonUtils.getDisplayParams(context)>=2.0) {
-				user.setImageUrl(image_obj.getString("maxImg"));
-			}
-			else if(CommonUtils.getDisplayParams(context)>=1.5) {
-				user.setImageUrl(image_obj.getString("middleImg"));
-			}
-			else {
-				user.setImageUrl(image_obj.getString("smallImg"));
-			}
 			user.setAddress(new String(data_obj.getString("address").getBytes("iso-8859-1"), "utf-8"));
+			if(!CommonUtils.convertNull(data_obj.getString("imageUrl")).equals("")) {
+				JSONObject image_obj=data_obj.getJSONObject("imageUrl");
+				if(CommonUtils.getDisplayParams(context)>=2.0) {
+					user.setImageUrl(image_obj.getString("maxImg"));
+				}
+				else if(CommonUtils.getDisplayParams(context)>=1.5) {
+					user.setImageUrl(image_obj.getString("middleImg"));
+				}
+				else {
+					user.setImageUrl(image_obj.getString("smallImg"));
+				}
+			}			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

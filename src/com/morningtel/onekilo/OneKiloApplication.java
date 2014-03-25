@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class OneKiloApplication extends Application {
 	
-	public String webUrl="http://222.73.249.235:8080/fz/";
+	public String webUrl="http://yiguanjia.duapp.com/";
 	public String strKey="HaajpyDaUMB7EryGVRuu7bYz";
 	public boolean isAppOpen=false;
 	public static final String refreshWebInfoAction="refreshWebInfoAction";
