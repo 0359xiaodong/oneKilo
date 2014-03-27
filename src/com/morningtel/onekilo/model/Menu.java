@@ -1,10 +1,14 @@
 package com.morningtel.onekilo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Menu implements Parcelable {
+public class Menu implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @hibernate.id generator-class="native"
 	 */
@@ -113,47 +117,4 @@ public class Menu implements Parcelable {
 		this.userAuth = userAuth;
 	}
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		dest.writeInt(id);
-		dest.writeString(name);
-		dest.writeInt(menuType);
-		dest.writeInt(orderNum);
-		dest.writeString(api);
-		dest.writeString(belongId);
-		dest.writeInt(userAuth);
-		dest.writeParcelable(addForm, flags);
-	}
-	
-	public static final Parcelable.Creator<Menu> CREATOR = new Parcelable.Creator<Menu>() {
-
-		@Override
-		public Menu createFromParcel(Parcel source) {
-			// TODO Auto-generated method stub
-			Menu menu=new Menu();
-			menu.id=source.readInt();
-			menu.name=source.readString();
-			menu.menuType=source.readInt();
-			menu.orderNum=source.readInt();
-			menu.api=source.readString();
-			menu.belongId=source.readString();
-			menu.userAuth=source.readInt();
-			menu.addForm=source.readParcelable(getClass().getClassLoader());
-			return menu;
-		}
-
-		@Override
-		public Menu[] newArray(int size) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-	};
 }

@@ -1,10 +1,14 @@
 package com.morningtel.onekilo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Tab implements Parcelable {
+public class Tab implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @hibernate.id generator-class="native"
 	 */
@@ -143,53 +147,4 @@ public class Tab implements Parcelable {
 		this.userAuth = userAuth;
 	}
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		dest.writeInt(id);
-		dest.writeString(name);
-		dest.writeInt(menuType);
-		dest.writeInt(orderNum);
-		dest.writeString(api);
-		dest.writeString(belongId);
-		dest.writeInt(userAuth);
-		dest.writeInt(needSearch);
-		dest.writeInt(needBar);
-		dest.writeInt(viewType);
-		dest.writeInt(needGeo);
-	}
-	
-	public static final Parcelable.Creator<Tab> CREATOR = new Parcelable.Creator<Tab>() {
-
-		@Override
-		public Tab createFromParcel(Parcel source) {
-			// TODO Auto-generated method stub
-			Tab tab=new Tab();
-			tab.id=source.readInt();
-			tab.name=source.readString();
-			tab.menuType=source.readInt();
-			tab.orderNum=source.readInt();
-			tab.api=source.readString();
-			tab.belongId=source.readString();
-			tab.userAuth=source.readInt();
-			tab.needSearch=source.readInt();
-			tab.needBar=source.readInt();
-			tab.needBar=source.readInt();
-			tab.needBar=source.readInt();
-			return tab;
-		}
-
-		@Override
-		public Tab[] newArray(int size) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-	};
 }

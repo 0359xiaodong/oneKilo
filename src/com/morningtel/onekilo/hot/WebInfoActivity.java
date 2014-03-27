@@ -195,14 +195,14 @@ public class WebInfoActivity extends BaseActivity {
 		if(getIntent().getExtras().getString("hotName").equals("")) {
 			nav_view.setVisibility(View.GONE);
 		}
-		if(getIntent().getExtras().getParcelableArrayList("menu")!=null&&getIntent().getExtras().getParcelableArrayList("menu").size()>0) {
+		if(getIntent().getExtras().getSerializable("menu")!=null&&((ArrayList<Menu>) getIntent().getExtras().getSerializable("menu")).size()>0) {
 			nav_add_layout.setVisibility(View.VISIBLE);
 			nav_add_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					ArrayList<Menu> menus=getIntent().getExtras().getParcelableArrayList("menu");
+					ArrayList<Menu> menus=((ArrayList<Menu>) getIntent().getExtras().getSerializable("menu"));
 					if(menus.size()==1) {
 						menuJumpControll(menus, 0);
 					}
@@ -229,7 +229,7 @@ public class WebInfoActivity extends BaseActivity {
 	}
 	
 	private void addMenuLayout() {
-		final ArrayList<Menu> menus=getIntent().getExtras().getParcelableArrayList("menu");
+		final ArrayList<Menu> menus=((ArrayList<Menu>) getIntent().getExtras().getSerializable("menu"));
 		for(int i=0;i<menus.size();i++) {
 			View view=LayoutInflater.from(WebInfoActivity.this).inflate(R.layout.menu_view, null);
 			TextView menu_text=(TextView) view.findViewById(R.id.menu_text);
@@ -285,7 +285,7 @@ public class WebInfoActivity extends BaseActivity {
 			intent=new Intent(WebInfoActivity.this, AddFormActivity.class);
 			bundle=new Bundle();
 			bundle.putString("hotName", menuName);
-			bundle.putParcelable("AddForm", af);
+			bundle.putSerializable("AddForm", af);
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1001);
 			break;
@@ -436,7 +436,7 @@ public class WebInfoActivity extends BaseActivity {
 		Intent intent_6=new Intent(WebInfoActivity.this, AddFormActivity.class);
 		Bundle bundle_6=new Bundle();
 		bundle_6.putString("hotName", title);
-		bundle_6.putParcelable("AddForm", JsonParse.getWebAddForm(addForm, false));
+		bundle_6.putSerializable("AddForm", JsonParse.getWebAddForm(addForm, false));
 		intent_6.putExtras(bundle_6);
 		startActivityForResult(intent_6, 501);
 	}
@@ -458,7 +458,7 @@ public class WebInfoActivity extends BaseActivity {
 			startActivity(intent);
 		}
 		else {
-			showCustomToast("获取数据失败，请重新加载该页面");
+			CommonUtils.showCustomToast(WebInfoActivity.this, "获取数据失败，请重新加载该页面");
 		}
 	}
 	

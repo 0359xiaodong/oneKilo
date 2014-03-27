@@ -8,7 +8,6 @@ import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.model.Group;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +26,7 @@ public class CommunityAdapter extends BaseAdapter {
 		this.group_list=group_list;
 		this.context=context;
 		
-		bitmapUtils = BitmapHelp.getBitmapUtils(context.getApplicationContext());
-        bitmapUtils.configDefaultLoadingImage(R.drawable.ic_launcher);
-        bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
-        bitmapUtils.configDefaultBitmapConfig(Bitmap.Config.RGB_565);
+		bitmapUtils=BitmapHelp.getBitmapUtils(context.getApplicationContext());
 	}
 
 	@Override

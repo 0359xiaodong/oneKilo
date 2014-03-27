@@ -49,7 +49,7 @@ public class OneKiloApplication extends Application {
         	Toast.makeText(getApplicationContext(), "初始化地图引擎失败", Toast.LENGTH_LONG).show();
         }
         
-        JPushInterface.setDebugMode(true); 	//设置开启日志,发布时请关闭日志
+        JPushInterface.setDebugMode(false); 	//设置开启日志,发布时请关闭日志
         JPushInterface.init(this);
 	}
 	

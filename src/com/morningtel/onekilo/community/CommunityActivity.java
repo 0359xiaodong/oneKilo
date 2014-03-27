@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,11 +19,14 @@ import com.baidu.mobstat.StatService;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.bundle.LauncherActivity;
+import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.common.Conn;
 import com.morningtel.onekilo.hot.WebInfoActivity;
 import com.morningtel.onekilo.hot.WebInfoTabActivity;
 import com.morningtel.onekilo.model.Group;
@@ -40,6 +44,8 @@ public class CommunityActivity extends BaseActivity {
 	
 	ArrayList<Group> group_list=null;
 	
+	public static BitmapUtils bitmapUtils;
+	
 	boolean isLoad=false;
 	
 	@Override
@@ -50,6 +56,11 @@ public class CommunityActivity extends BaseActivity {
 		setContentView(R.layout.activity_community);
 		
 		group_list=new ArrayList<Group>();
+		
+		bitmapUtils=BitmapHelp.getBitmapUtils(CommunityActivity.this);
+        bitmapUtils.configDefaultLoadingImage(R.drawable.ic_launcher);
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+        bitmapUtils.configDefaultBitmapConfig(Bitmap.Config.RGB_565);
 		
 		init();
 	}
@@ -70,6 +81,9 @@ public class CommunityActivity extends BaseActivity {
 		
 		community_listview=(PullToRefreshListView) findViewById(R.id.community_listview);
 		adapter=new CommunityAdapter(group_list, CommunityActivity.this);
+		if(Conn.getInstance(getApplicationContext()).getGroupModelList().size()>0) {
+			group_list.addAll(Conn.getInstance(getApplicationContext()).getGroupModelList());
+		}
 		community_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
@@ -85,7 +99,7 @@ public class CommunityActivity extends BaseActivity {
 					isLoad=true;
 				}
 				else {
-					showCustomToast("正在加载中，请稍后");
+					CommonUtils.showCustomToast(CommunityActivity.this, "正在加载中，请稍后");
 				}
 			}});
 		community_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,7 +110,7 @@ public class CommunityActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				int position_=arg2-1;
 				if(group_list.get(position_).getViewType()==Hot.CODE_VIEWTYPE&&android.os.Build.VERSION.SDK_INT<15) {
-					showCustomToast("您的系统版本过低，暂时不支持"+group_list.get(position_).getTabs().get(0).getName()+"功能");
+					CommonUtils.showCustomToast(CommunityActivity.this, "您的系统版本过低，暂时不支持"+group_list.get(position_).getTabs().get(0).getName()+"功能");
 					return ;
 				}
 				Intent intent=null;
@@ -108,15 +122,15 @@ public class CommunityActivity extends BaseActivity {
 					bundle.putString("hotName", group_list.get(position_).getName());
 					bundle.putInt("needBar", group_list.get(position_).getTabs().get(0).getNeedBar());
 					bundle.putString("api", group_list.get(position_).getTabs().get(0).getApi());
-					bundle.putParcelableArrayList("menu", group_list.get(position_).getMenus());	
+					bundle.putSerializable("menu", group_list.get(position_).getMenus());	
 					bundle.putString("groupId", group_list.get(position_).getId());
 					bundle.putInt("btnType", group_list.get(position_).getBtnType());
 					break;
 				case Hot.TABWEBVIEW_VIEWTYPE:
 					intent=new Intent(CommunityActivity.this, WebInfoTabActivity.class);
-					bundle.putParcelableArrayList("tabs", group_list.get(position_).getTabs());
+					bundle.putSerializable("tabs", group_list.get(position_).getTabs());
 					bundle.putString("hotName", group_list.get(position_).getName());
-					bundle.putParcelableArrayList("menu", group_list.get(position_).getMenus());
+					bundle.putSerializable("menu", group_list.get(position_).getMenus());
 					bundle.putString("groupId", group_list.get(position_).getId());
 					bundle.putInt("btnType", group_list.get(position_).getBtnType());
 					break;
@@ -181,17 +195,17 @@ public class CommunityActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
 				if(msg.obj==null) {
-					showCustomToast("网络异常，请稍后再试");
+					CommonUtils.showCustomToast(CommunityActivity.this, "网络异常，请稍后再试");
 				}
 				else {
 					String str=msg.obj.toString();
 					if(CommonUtils.convertNull(str).equals("")) {
-						showCustomToast("网络异常，请稍后再试");
+						CommonUtils.showCustomToast(CommunityActivity.this, "网络异常，请稍后再试");
 					}
 					else {
 						ArrayList<Group> group_list_temp=JsonParse.getCommunicateList(str, CommunityActivity.this);
 						if(group_list_temp==null) {
-							showCustomToast("数据解析异常，请稍后再试");
+							CommonUtils.showCustomToast(CommunityActivity.this, "数据解析异常，请稍后再试");
 						}
 						else {
 							group_list.clear();
@@ -213,6 +227,7 @@ public class CommunityActivity extends BaseActivity {
 				Message m=new Message();
 				HashMap<String, String> map=new HashMap<String, String>();
 				map.put("token", CommonUtils.getLoginUser(CommunityActivity.this).getToken());
+				map.put("updateTime", CommonUtils.getCommunicateUpdateTime(CommunityActivity.this));
 				String result=CommonUtils.getWebData(map, ((OneKiloApplication) getApplicationContext()).webUrl+"group_doSearchByUser.do");
 				m.obj=result;
 				handler.sendMessage(m);
@@ -221,6 +236,9 @@ public class CommunityActivity extends BaseActivity {
 	
 	public void onResume() {
 		super.onResume();
+        bitmapUtils.configDefaultLoadingImage(R.drawable.ic_launcher);
+        bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+        bitmapUtils.configDefaultBitmapConfig(Bitmap.Config.RGB_565);
 		StatService.onResume(this);
 	}
 

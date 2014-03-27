@@ -225,4 +225,48 @@ public class CommonUtils {
         }
         return degree;
     }
+    
+    /**
+     * 保存服务列表更新时间
+     * @param context
+     * @param updateTime
+     */
+    public static void saveHotUpdateTime(Context context, String updateTime) {
+    	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
+		SharedPreferences.Editor editor=sp.edit();
+		editor.putString("updateTime", updateTime);
+		editor.commit();
+    }
+    
+    /**
+     * 获取服务列表更新时间
+     * @param context
+     * @return
+     */
+    public static String getHotUpdateTime(Context context) {
+    	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
+    	return sp.getString("updateTime", "-1");
+    }
+    
+    /**
+     * 获取圈子列表更新时间
+     * @param context
+     * @param updateTime
+     */
+    public static void saveCommunicateUpdateTime(Context context, String updateTime) {
+    	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
+		SharedPreferences.Editor editor=sp.edit();
+		editor.putString("communicateUpdateTime", updateTime);
+		editor.commit();
+    }
+    
+    /**
+     * 获取服务列表更新时间
+     * @param context
+     * @return
+     */
+    public static String getCommunicateUpdateTime(Context context) {
+    	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
+    	return sp.getString("communicateUpdateTime", "-1");
+    }
 }

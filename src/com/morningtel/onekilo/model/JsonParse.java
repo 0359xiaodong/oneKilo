@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
+import com.morningtel.onekilo.common.Conn;
 import com.morningtel.onekilo.service.MusicService;
 
 public class JsonParse {
@@ -30,7 +31,13 @@ public class JsonParse {
 			if(status==1) {
 				return true;
 			}
-			CommonUtils.showCustomToast(context, obj.getString("data"));
+			
+			try {
+				CommonUtils.showCustomToast(context, new String(obj.getString("data").getBytes("iso-8859-1"), "utf-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -47,14 +54,24 @@ public class JsonParse {
 		ArrayList<Hot> hot_list=new ArrayList<Hot>();
 		try {
 			JSONObject obj=new JSONObject(str);
-			if(!checkPermission(str, context)) {
+			int status=obj.getInt("status");
+			//无返回时
+			if(status==0) {
 				return null;
 			}
+			//无更新数据时
+			else if(status==1) {
+				return Conn.getInstance(context).getHotModelList();
+			}
+			//有更新返回时
+			Conn.getInstance(context).deleteHotModel();
+			CommonUtils.saveHotUpdateTime(context, ""+status);
 			JSONArray data_array=obj.getJSONArray("data");
 			for(int i=0;i<data_array.length();i++) {
 				JSONObject hot_obj=data_array.getJSONObject(i);
 				Hot hot=getHot(hot_obj, context);
 				hot_list.add(hot);
+				Conn.getInstance(context).insertModel(hot);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -74,14 +91,23 @@ public class JsonParse {
 		try {
 			JSONObject obj=new JSONObject(str);
 			int status=obj.getInt("status");
-			if(status!=1) {
+			//无返回时
+			if(status==0) {
 				return null;
 			}
+			//无更新数据时
+			else if(status==1) {
+				return Conn.getInstance(context).getGroupModelList();
+			}
+			//有更新返回时
+			Conn.getInstance(context).deleteGroup();
+			CommonUtils.saveCommunicateUpdateTime(context, ""+status);
 			JSONArray data_array=obj.getJSONArray("data");
 			for(int i=0;i<data_array.length();i++) {
 				JSONObject group_obj=data_array.getJSONObject(i);
 				Group group=getGroup(group_obj, context);
 				group_list.add(group);
+				Conn.getInstance(context).insertModel(group);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

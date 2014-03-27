@@ -50,7 +50,7 @@ public class WebInfoTabActivity extends TabActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_webtabmain);
 
-		tabList=getIntent().getExtras().getParcelableArrayList("tabs");
+		tabList=((ArrayList<Tab>) getIntent().getExtras().getSerializable("tabs"));
 		
 		if(getIntent().getExtras().getInt("btnType")==Hot.ADD_BUTTONTYPE) {
 			doAni=true;
@@ -108,14 +108,14 @@ public class WebInfoTabActivity extends TabActivity {
 		}
 		
 		menu_tab_layout=(LinearLayout) findViewById(R.id.menu_tab_layout);
-		if(getIntent().getExtras().getParcelableArrayList("menu")!=null&&getIntent().getExtras().getParcelableArrayList("menu").size()>0) {
+		if(getIntent().getExtras().getSerializable("menu")!=null&&((ArrayList<Menu>) getIntent().getExtras().getSerializable("menu")).size()>0) {
 			nav_add_layout.setVisibility(View.VISIBLE);
 			nav_add_layout.setOnClickListener(new LinearLayout.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					ArrayList<Menu> menus=getIntent().getExtras().getParcelableArrayList("menu");
+					ArrayList<Menu> menus=((ArrayList<Menu>) getIntent().getExtras().getSerializable("menu"));
 					if(menus.size()==1) {
 						menuJumpControll(menus, 0);
 					}
@@ -168,7 +168,7 @@ public class WebInfoTabActivity extends TabActivity {
 	}
 	
 	private void addMenuLayout() {
-		final ArrayList<Menu> menus=getIntent().getExtras().getParcelableArrayList("menu");
+		final ArrayList<Menu> menus=((ArrayList<Menu>) getIntent().getExtras().getSerializable("menu"));
 		for(int i=0;i<menus.size();i++) {
 			View view=LayoutInflater.from(WebInfoTabActivity.this).inflate(R.layout.menu_view, null);
 			TextView menu_text=(TextView) view.findViewById(R.id.menu_text);
@@ -224,7 +224,7 @@ public class WebInfoTabActivity extends TabActivity {
 			intent=new Intent(WebInfoTabActivity.this, AddFormActivity.class);
 			bundle=new Bundle();
 			bundle.putString("hotName", menuName);
-			bundle.putParcelable("AddForm", af);
+			bundle.putSerializable("AddForm", af);
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1101);
 			break;

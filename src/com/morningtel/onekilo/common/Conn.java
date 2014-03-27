@@ -9,6 +9,7 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.morningtel.onekilo.model.Group;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.MessageStatusModel;
 import com.morningtel.onekilo.model.SubjectModel;
@@ -35,6 +36,11 @@ public class Conn extends SQLiteOpenHelper {
 	final static String HOT_TOPIC="hot_topic";
 	final static String HOT_INFO="hot_info";
 	final static String HOT_ID="hot_id";
+	
+	//服务列表缓存对象
+	final static String GROUP_TOPIC="group_topic";
+	final static String GROUP_INFO="group_info";
+	final static String GROUP_ID="group_id";
 	
 	//消息缓存对象
 	final static String MESSAGE_TOPIC="message_topic";
@@ -68,6 +74,7 @@ public class Conn extends SQLiteOpenHelper {
 		db.execSQL("create table if not exists "+SUBJECT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+SUBJECT_INFO+" blob)");
 		db.execSQL("create table if not exists "+MESSAGE_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+MESSAGE_INFO+" blob, "+MESSAGE_ID+" integer)");
 		db.execSQL("create table if not exists "+HOT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+HOT_INFO+" blob, "+HOT_ID+" integer)");	
+		db.execSQL("create table if not exists "+GROUP_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+GROUP_INFO+" blob, "+GROUP_ID+" integer)");	
 		db.execSQL("create table if not exists "+USER_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+USER_INFO+" blob)");
 	}
 
@@ -101,6 +108,12 @@ public class Conn extends SQLiteOpenHelper {
 				values.put(HOT_INFO, bytes);
 				values.put(HOT_ID, ((Hot) obj).getId());
 			}
+			else if(obj instanceof Group) {
+				byte[] bytes=serialize((Group) obj);
+				values=new ContentValues(2);
+				values.put(GROUP_INFO, bytes);
+				values.put(GROUP_ID, ((Group) obj).getId());
+			}
 			else if(obj instanceof User) {
 				byte[] bytes=serialize((User) obj);
 				values=new ContentValues(1);
@@ -116,6 +129,9 @@ public class Conn extends SQLiteOpenHelper {
 			}
 			else if(obj instanceof Hot) {
 				db.insert(HOT_TOPIC, null, values);
+			}
+			else if(obj instanceof Group) {
+				db.insert(GROUP_TOPIC, null, values);
 			}
 			else if(obj instanceof User) {
 				db.insert(USER_TOPIC, null, values);
@@ -160,6 +176,17 @@ public class Conn extends SQLiteOpenHelper {
 	}
 	
 	/**
+	 * 删除圈子
+	 */
+	public void deleteGroup() {
+		synchronized (this) {
+			SQLiteDatabase db=this.getWritableDatabase();
+			db.delete(GROUP_TOPIC, null, null);
+			db.close();
+		}
+	}
+	
+	/**
 	 * 删除user
 	 */
 	public void deleteUser() {
@@ -172,7 +199,6 @@ public class Conn extends SQLiteOpenHelper {
 	
 	/**
 	 * 获取全部SubjectModel
-	 * @param limit
 	 * @return
 	 */
 	public ArrayList<SubjectModel> getSubjectModelList() {
@@ -193,7 +219,6 @@ public class Conn extends SQLiteOpenHelper {
 	
 	/**
 	 * 获取全部MessageStatusModel
-	 * @param limit
 	 * @return
 	 */
 	public LinkedList<MessageStatusModel> getMessageStatusModelList() {
@@ -213,8 +238,7 @@ public class Conn extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * 获取全部MessageStatusModel
-	 * @param limit
+	 * 获取全部服务列表
 	 * @return
 	 */
 	public ArrayList<Hot> getHotModelList() {
@@ -226,6 +250,26 @@ public class Conn extends SQLiteOpenHelper {
 			for(int i=0;i<cs.getCount();i++) {
 				cs.moveToPosition(i);
 				model_list.add(deserializeHotModel(cs.getBlob(1)));
+			}
+			cs.close();
+			db.close();
+			return model_list;
+		}		
+	}
+	
+	/**
+	 * 获取全部圈子列表
+	 * @return
+	 */
+	public ArrayList<Group> getGroupModelList() {
+		synchronized (this) {
+			ArrayList<Group> model_list=new ArrayList<Group>();
+			SQLiteDatabase db=this.getReadableDatabase();
+			Cursor cs=db.query(GROUP_TOPIC, null, null, null, null, null, null, null);
+			cs.moveToFirst();
+			for(int i=0;i<cs.getCount();i++) {
+				cs.moveToPosition(i);
+				model_list.add(deserializeGroupModel(cs.getBlob(1)));
 			}
 			cs.close();
 			db.close();
@@ -343,6 +387,9 @@ public class Conn extends SQLiteOpenHelper {
         	else if(obj instanceof MessageStatusModel) {
         		out.writeObject((MessageStatusModel) obj); 
         	}
+        	else if(obj instanceof Group) {
+        		out.writeObject((Group) obj); 
+        	}
         	else if(obj instanceof Hot) {
         		out.writeObject((Hot) obj); 
         	}
@@ -414,6 +461,29 @@ public class Conn extends SQLiteOpenHelper {
 			ByteArrayInputStream mem_in = new ByteArrayInputStream(bytes); 
 			ObjectInputStream in = new ObjectInputStream(mem_in);  
 			Hot model = (Hot)in.readObject();  
+			in.close(); 
+			mem_in.close();  
+			return model; 
+		} catch (StreamCorruptedException e) { 
+
+		} catch (ClassNotFoundException e) { 
+
+		} catch (IOException e) { 
+		
+		} 
+		return null; 
+	}
+	
+	/**
+	 * 反序列化Group
+	 * @param bytes
+	 * @return
+	 */
+	public static Group deserializeGroupModel(byte[] bytes){ 
+		try { 
+			ByteArrayInputStream mem_in = new ByteArrayInputStream(bytes); 
+			ObjectInputStream in = new ObjectInputStream(mem_in);  
+			Group model = (Group)in.readObject();  
 			in.close(); 
 			mem_in.close();  
 			return model; 

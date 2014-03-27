@@ -9,11 +9,9 @@ import org.osgi.framework.ServiceReference;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
-import com.morningtel.onekilo.community.CommunityActivity;
 
 import android.os.Bundle;
 import android.content.Intent;
-import android.view.KeyEvent;
 import android.view.Window;
 
 public class LauncherActivity extends BaseActivity {
@@ -36,7 +34,7 @@ public class LauncherActivity extends BaseActivity {
             StringBuffer buf=new StringBuffer();
 			buf.append("插件平台启动失败：\n");
 			buf.append(ex.getMessage());
-			showCustomToast(buf.toString());
+			CommonUtils.showCustomToast(LauncherActivity.this, buf.toString());
 			finish();
         }
         

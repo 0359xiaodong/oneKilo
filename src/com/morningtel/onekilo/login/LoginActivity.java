@@ -15,7 +15,6 @@ import android.view.View.OnTouchListener;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mobstat.StatService;
@@ -28,7 +27,6 @@ import com.morningtel.onekilo.common.DES;
 import com.morningtel.onekilo.main.MainActivity;
 import com.morningtel.onekilo.model.JsonParse;
 import com.morningtel.onekilo.model.User;
-import com.tencent.android.tpush.XGPushManager;
 
 public class LoginActivity extends BaseActivity {
 	
@@ -38,10 +36,7 @@ public class LoginActivity extends BaseActivity {
 	EditText pass=null;
 	TextView login=null;
 	TextView regist=null;
-	TextView no_user_login=null;
 	ImageView login_show_mima=null;
-	RelativeLayout account_icon_weibo=null;
-	RelativeLayout account_icon_qzone=null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +77,12 @@ public class LoginActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				if(name.getText().toString().equals("")) {
 					name.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.shakex));
-					showCustomToast("您的用户名不能为空");
+					CommonUtils.showCustomToast(LoginActivity.this, "您的用户名不能为空");
 					return;
 				}
 				if(pass.getText().toString().equals("")) {
 					pass.startAnimation(AnimationUtils.loadAnimation(LoginActivity.this, R.anim.shakex));
-					showCustomToast("您的密码不能为空");
+					CommonUtils.showCustomToast(LoginActivity.this, "您的密码不能为空");
 					return;
 				}
 				login(name.getText().toString(), pass.getText().toString());
@@ -111,9 +106,6 @@ public class LoginActivity extends BaseActivity {
 				return true;
 			}
 		});
-		account_icon_weibo=(RelativeLayout) findViewById(R.id.account_icon_weibo);
-		account_icon_qzone=(RelativeLayout) findViewById(R.id.account_icon_qzone);
-		no_user_login=(TextView) findViewById(R.id.no_user_login);
 	}
 	
 	//登录
@@ -125,7 +117,7 @@ public class LoginActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				dismissProgressDialog();
 				if(msg.obj==null) {
-					showCustomToast("网络异常，请稍后再试");
+					CommonUtils.showCustomToast(LoginActivity.this, "网络异常，请稍后再试");
 					return;
 				}
 				String result=msg.obj.toString();
@@ -138,9 +130,6 @@ public class LoginActivity extends BaseActivity {
 					intent.setClass(LoginActivity.this, MainActivity.class);
 					startActivity(intent);
 					finish();				
-				}
-				else {
-					showCustomToast(result);
 				}
 			}
 		};
@@ -156,7 +145,6 @@ public class LoginActivity extends BaseActivity {
 					map.put("account", uName);
 					map.put("password", DES.encryptDES(passw, "yguanjia"));
 					String result=CommonUtils.getWebData(map, ((OneKiloApplication) getApplication()).webUrl+"/openuser_appLogin.do");					
-					System.out.println(new String(result.getBytes("iso-8859-1"), "utf-8"));
 					m.obj=result;
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

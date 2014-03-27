@@ -23,6 +23,7 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.morningtel.onekilo.BaseActivity;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
+import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.myview.MyMapView;
 
 public class MappoisActivity extends BaseActivity {
@@ -47,7 +48,7 @@ public class MappoisActivity extends BaseActivity {
 		@Override
 		public void onGetNetworkState(int arg0) {
 			// TODO Auto-generated method stub
-			showCustomToast("网络连接失败，请检查您的网络连接是否通畅");
+			CommonUtils.showCustomToast(MappoisActivity.this, "网络连接失败，请检查您的网络连接是否通畅");
 		}
 
 		@Override
@@ -56,7 +57,7 @@ public class MappoisActivity extends BaseActivity {
 			if(arg0!=0) {
 				
 			}
-			showCustomToast("地图引擎未获取到足够的权限");
+			CommonUtils.showCustomToast(MappoisActivity.this, "地图引擎未获取到足够的权限");
 		}
 		
 	}

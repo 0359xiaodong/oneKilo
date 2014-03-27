@@ -13,10 +13,6 @@ public class BaseActivity extends Activity {
 	
 	private ProgressDialog _dialog = null;
 	
-	public void showCustomToast(String str) {
-		CommonUtils.showCustomToast(BaseActivity.this, str);
-	};
-	
 	protected void showProgressDialog(String str) {
 		if(_dialog == null) {
 			_dialog = new ProgressDialog(this);

@@ -1,10 +1,14 @@
 package com.morningtel.onekilo.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class AddForm implements Parcelable {
+public class AddForm implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
      * @hibernate.id generator-class="uuid"
      */
@@ -156,51 +160,4 @@ public class AddForm implements Parcelable {
 		this.otherParam = otherParam;
 	}
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		dest.writeString(id);
-		dest.writeString(needTitle);
-		dest.writeString(needContent);
-		dest.writeString(needImage);
-		dest.writeString(needGeo);
-		dest.writeString(needMap);
-		dest.writeString(needAnonymity);
-		dest.writeString(api);
-		dest.writeString(otherParam);
-		dest.writeInt(belongId);
-		dest.writeString(btnName);
-	}
-	
-	public static final Parcelable.Creator<AddForm> CREATOR = new Parcelable.Creator<AddForm>() {
-
-		@Override
-		public AddForm createFromParcel(Parcel source) {
-			// TODO Auto-generated method stub
-			AddForm af=new AddForm();
-			af.id=source.readString();
-			af.needTitle=source.readString();
-			af.needContent=source.readString();
-			af.needImage=source.readString();
-			af.needGeo=source.readString();
-			af.needMap=source.readString();
-			af.needAnonymity=source.readString();
-			af.api=source.readString();
-			af.otherParam=source.readString();
-			af.belongId=source.readInt();
-			af.btnName=source.readString();
-			return af;
-		}
-
-		@Override
-		public AddForm[] newArray(int size) {
-			// TODO Auto-generated method stub
-			return null;
-		}};
 }

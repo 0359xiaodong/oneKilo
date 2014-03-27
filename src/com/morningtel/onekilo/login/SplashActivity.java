@@ -30,7 +30,7 @@ public class SplashActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_splash);
 		
-		XGPushConfig.enableDebug(this, true);
+		XGPushConfig.enableDebug(this, false);
 		initNotificationBuilder(getApplicationContext());
 		
 		StatService.setDebugOn(true);
