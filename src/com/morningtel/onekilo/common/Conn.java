@@ -9,6 +9,7 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.model.Group;
 import com.morningtel.onekilo.model.Hot;
 import com.morningtel.onekilo.model.MessageStatusModel;
@@ -36,6 +37,7 @@ public class Conn extends SQLiteOpenHelper {
 	final static String HOT_TOPIC="hot_topic";
 	final static String HOT_INFO="hot_info";
 	final static String HOT_ID="hot_id";
+	final static String USER_ID="user_id";
 	
 	//服务列表缓存对象
 	final static String GROUP_TOPIC="group_topic";
@@ -73,8 +75,8 @@ public class Conn extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 		db.execSQL("create table if not exists "+SUBJECT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+SUBJECT_INFO+" blob)");
 		db.execSQL("create table if not exists "+MESSAGE_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+MESSAGE_INFO+" blob, "+MESSAGE_ID+" integer)");
-		db.execSQL("create table if not exists "+HOT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+HOT_INFO+" blob, "+HOT_ID+" integer)");	
-		db.execSQL("create table if not exists "+GROUP_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+GROUP_INFO+" blob, "+GROUP_ID+" integer)");	
+		db.execSQL("create table if not exists "+HOT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+HOT_INFO+" blob, "+HOT_ID+" integer, "+USER_ID+" text)");	
+		db.execSQL("create table if not exists "+GROUP_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+GROUP_INFO+" blob, "+GROUP_ID+" integer, "+USER_ID+" text)");	
 		db.execSQL("create table if not exists "+USER_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+USER_INFO+" blob)");
 	}
 
@@ -107,12 +109,14 @@ public class Conn extends SQLiteOpenHelper {
 				values=new ContentValues(2);
 				values.put(HOT_INFO, bytes);
 				values.put(HOT_ID, ((Hot) obj).getId());
+				values.put(USER_ID, ((OneKiloApplication) context.getApplicationContext()).user.getId());
 			}
 			else if(obj instanceof Group) {
 				byte[] bytes=serialize((Group) obj);
 				values=new ContentValues(2);
 				values.put(GROUP_INFO, bytes);
 				values.put(GROUP_ID, ((Group) obj).getId());
+				values.put(USER_ID, ((OneKiloApplication) context.getApplicationContext()).user.getId());
 			}
 			else if(obj instanceof User) {
 				byte[] bytes=serialize((User) obj);
@@ -170,7 +174,7 @@ public class Conn extends SQLiteOpenHelper {
 	public void deleteHotModel() {
 		synchronized (this) {
 			SQLiteDatabase db=this.getWritableDatabase();
-			db.delete(HOT_TOPIC, null, null);
+			db.delete(HOT_TOPIC, USER_ID+"=?", new String[]{((OneKiloApplication) context.getApplicationContext()).user.getId()});
 			db.close();
 		}
 	}
@@ -181,7 +185,7 @@ public class Conn extends SQLiteOpenHelper {
 	public void deleteGroup() {
 		synchronized (this) {
 			SQLiteDatabase db=this.getWritableDatabase();
-			db.delete(GROUP_TOPIC, null, null);
+			db.delete(GROUP_TOPIC, USER_ID+"=?", new String[]{((OneKiloApplication) context.getApplicationContext()).user.getId()});
 			db.close();
 		}
 	}
@@ -245,7 +249,7 @@ public class Conn extends SQLiteOpenHelper {
 		synchronized (this) {
 			ArrayList<Hot> model_list=new ArrayList<Hot>();
 			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cs=db.query(HOT_TOPIC, null, null, null, null, null, null, null);
+			Cursor cs=db.query(HOT_TOPIC, null, USER_ID+"=?", new String[]{((OneKiloApplication) context.getApplicationContext()).user.getId()}, null, null, null, null);
 			cs.moveToFirst();
 			for(int i=0;i<cs.getCount();i++) {
 				cs.moveToPosition(i);
@@ -265,7 +269,7 @@ public class Conn extends SQLiteOpenHelper {
 		synchronized (this) {
 			ArrayList<Group> model_list=new ArrayList<Group>();
 			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cs=db.query(GROUP_TOPIC, null, null, null, null, null, null, null);
+			Cursor cs=db.query(GROUP_TOPIC, null, USER_ID+"=?", new String[]{((OneKiloApplication) context.getApplicationContext()).user.getId()}, null, null, null, null);
 			cs.moveToFirst();
 			for(int i=0;i<cs.getCount();i++) {
 				cs.moveToPosition(i);

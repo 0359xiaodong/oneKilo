@@ -286,6 +286,9 @@ public class WebInfoActivity extends BaseActivity {
 			bundle=new Bundle();
 			bundle.putString("hotName", menuName);
 			bundle.putSerializable("AddForm", af);
+			if(getIntent().getExtras().getString("groupId")!=null) {
+				bundle.putString("groupId", getIntent().getExtras().getString("groupId"));
+			}
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1001);
 			break;
@@ -437,6 +440,9 @@ public class WebInfoActivity extends BaseActivity {
 		Bundle bundle_6=new Bundle();
 		bundle_6.putString("hotName", title);
 		bundle_6.putSerializable("AddForm", JsonParse.getWebAddForm(addForm, false));
+		if(getIntent().getExtras().getString("groupId")!=null) {
+			bundle_6.putString("groupId", getIntent().getExtras().getString("groupId"));
+		}
 		intent_6.putExtras(bundle_6);
 		startActivityForResult(intent_6, 501);
 	}

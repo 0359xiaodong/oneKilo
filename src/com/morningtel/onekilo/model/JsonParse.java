@@ -324,7 +324,7 @@ public class JsonParse {
 				return null;
 			}
 			JSONObject data_obj=obj.getJSONObject("data");
-			user.setAccount(data_obj.getString("account"));
+			user.setAccount(new String(data_obj.getString("account").getBytes("iso-8859-1"), "utf-8"));
 			user.setStatus(data_obj.getInt("ustatus"));
 			user.setNickName(new String(data_obj.getString("nickName").getBytes("iso-8859-1"), "utf-8"));
 			user.setLastTime(data_obj.getInt("lastTime"));

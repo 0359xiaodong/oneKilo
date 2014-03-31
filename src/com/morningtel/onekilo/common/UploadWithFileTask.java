@@ -42,6 +42,7 @@ public class UploadWithFileTask extends AsyncTask<String, Integer, String> {
 	String content="";
 	String mapGeo="";
 	String geo="";
+	String groupId="";
 	
 	Context context;
 	
@@ -164,6 +165,16 @@ public class UploadWithFileTask extends AsyncTask<String, Integer, String> {
 	}
 
 
+	public String getGroupId() {
+		return groupId;
+	}
+
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+
 	@Override
 	protected String doInBackground(String... params) {
 		// TODO Auto-generated method stub
@@ -186,6 +197,9 @@ public class UploadWithFileTask extends AsyncTask<String, Integer, String> {
 			}
 			if(!geo.equals("")) {
 				map.put("geo", geo);
+			}
+			if(!groupId.equals("")) {
+				map.put("groupId", groupId);
 			}
 			map.put("token", token);
 			result=uploadFile(path, map, filePath, type);			

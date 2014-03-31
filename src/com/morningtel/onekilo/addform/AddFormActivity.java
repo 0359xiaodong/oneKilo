@@ -434,6 +434,9 @@ public class AddFormActivity extends BaseActivity {
 		else if(!CommonUtils.convertNull(af.getNeedGeo()).equals("")) {
 			task.setGeo(""+locData.longitude+","+locData.latitude);
 		}
+		if(getIntent().getExtras().getString("groupId")!=null) {
+			task.setGroupId(getIntent().getExtras().getString("groupId"));
+		}
 		String[] imageFile=new String[uploadImages.size()];
 		for(int i=0;i<uploadImages.size();i++) {
 			imageFile[i]=CommonUtils.getimageUploadPath(uploadImages.get(i).imagePath, i);
@@ -478,6 +481,9 @@ public class AddFormActivity extends BaseActivity {
 		}
 		else {
 			task.setUrl(af.getApi()+"?"+af.getOtherParam());
+		}
+		if(getIntent().getExtras().getString("groupId")!=null) {
+			task.setGroupId(getIntent().getExtras().getString("groupId"));
 		}
 		task.setContext(AddFormActivity.this);
 		task.setNotifyId(((OneKiloApplication) getApplicationContext()).no_num);

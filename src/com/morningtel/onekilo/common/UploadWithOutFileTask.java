@@ -27,6 +27,7 @@ public class UploadWithOutFileTask extends AsyncTask<String, Integer, String> {
 	String mapGeo="";
 	String geo="";
 	String url="";
+	String groupId="";
 	
 	Context context;
 	
@@ -155,6 +156,15 @@ public class UploadWithOutFileTask extends AsyncTask<String, Integer, String> {
 		this.url = url;
 	}
 
+	public String getGroupId() {
+		return groupId;
+	}
+
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
 
 	@Override
 	protected String doInBackground(String... params) {
@@ -172,6 +182,9 @@ public class UploadWithOutFileTask extends AsyncTask<String, Integer, String> {
 		}
 		if(!geo.equals("")) {
 			map.put("geo", geo);
+		}
+		if(!groupId.equals("")) {
+			map.put("groupId", groupId);
 		}
 		map.put("token", token);
 		result=CommonUtils.getWebData(map, url);

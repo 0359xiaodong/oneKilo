@@ -234,7 +234,7 @@ public class CommonUtils {
     public static void saveHotUpdateTime(Context context, String updateTime) {
     	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
 		SharedPreferences.Editor editor=sp.edit();
-		editor.putString("updateTime", updateTime);
+		editor.putString(((OneKiloApplication) context.getApplicationContext()).user.getId()+"_hot", updateTime);
 		editor.commit();
     }
     
@@ -245,7 +245,7 @@ public class CommonUtils {
      */
     public static String getHotUpdateTime(Context context) {
     	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
-    	return sp.getString("updateTime", "-1");
+    	return sp.getString(((OneKiloApplication) context.getApplicationContext()).user.getId()+"_hot", "-1");
     }
     
     /**
@@ -256,7 +256,7 @@ public class CommonUtils {
     public static void saveCommunicateUpdateTime(Context context, String updateTime) {
     	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
 		SharedPreferences.Editor editor=sp.edit();
-		editor.putString("communicateUpdateTime", updateTime);
+		editor.putString(((OneKiloApplication) context.getApplicationContext()).user.getId()+"_com", updateTime);
 		editor.commit();
     }
     
@@ -267,6 +267,6 @@ public class CommonUtils {
      */
     public static String getCommunicateUpdateTime(Context context) {
     	SharedPreferences sp=context.getSharedPreferences("onekilo", Activity.MODE_PRIVATE);
-    	return sp.getString("communicateUpdateTime", "-1");
+    	return sp.getString(((OneKiloApplication) context.getApplicationContext()).user.getId()+"_com", "-1");
     }
 }
