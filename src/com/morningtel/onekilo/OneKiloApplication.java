@@ -17,6 +17,7 @@ public class OneKiloApplication extends Application {
 	
 	public String webUrl="http://yiguanjia.duapp.com/";
 	public String strKey="HaajpyDaUMB7EryGVRuu7bYz";
+	public String pushIconUrl="http://bcs.duapp.com/";
 	public boolean isAppOpen=false;
 	public static final String refreshWebInfoAction="refreshWebInfoAction";
 	//通知栏notify序号
@@ -49,7 +50,7 @@ public class OneKiloApplication extends Application {
         	Toast.makeText(getApplicationContext(), "初始化地图引擎失败", Toast.LENGTH_LONG).show();
         }
         
-        JPushInterface.setDebugMode(false); 	//设置开启日志,发布时请关闭日志
+        JPushInterface.setDebugMode(true); 	//设置开启日志,发布时请关闭日志
         JPushInterface.init(this);
 	}
 	

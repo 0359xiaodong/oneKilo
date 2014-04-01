@@ -16,6 +16,7 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = "MyReceiver";
+	public static final String MESSAGE_TAG="message_tag";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -36,6 +37,16 @@ public class MyReceiver extends BroadcastReceiver {
             Log.d(TAG, "接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "接收到推送下来的通知的ID: " + notifactionId);
+            
+            String messge_result=bundle.getString(JPushInterface.EXTRA_EXTRA);
+            String message_content=bundle.getString(JPushInterface.EXTRA_ALERT);
+            Intent intent_xiaoxi=new Intent();
+            intent_xiaoxi.setAction(MESSAGE_TAG);
+            Bundle bundle_xiaoxi=new Bundle();
+            bundle_xiaoxi.putString("messge_result", messge_result);
+            bundle_xiaoxi.putString("message_content", message_content);
+            intent_xiaoxi.putExtras(bundle_xiaoxi);
+            context.sendBroadcast(intent_xiaoxi);
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "用户点击打开了通知");

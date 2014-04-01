@@ -74,7 +74,7 @@ public class Conn extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 		db.execSQL("create table if not exists "+SUBJECT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+SUBJECT_INFO+" blob)");
-		db.execSQL("create table if not exists "+MESSAGE_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+MESSAGE_INFO+" blob, "+MESSAGE_ID+" integer)");
+		db.execSQL("create table if not exists "+MESSAGE_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+MESSAGE_INFO+" blob, "+MESSAGE_ID+" integer, "+USER_ID+" text)");
 		db.execSQL("create table if not exists "+HOT_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+HOT_INFO+" blob, "+HOT_ID+" integer, "+USER_ID+" text)");	
 		db.execSQL("create table if not exists "+GROUP_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+GROUP_INFO+" blob, "+GROUP_ID+" integer, "+USER_ID+" text)");	
 		db.execSQL("create table if not exists "+USER_TOPIC+"("+_ID+" integer primary key autoincrement not null, "+USER_INFO+" blob)");
@@ -102,7 +102,8 @@ public class Conn extends SQLiteOpenHelper {
 				byte[] bytes=serialize((MessageStatusModel) obj);
 				values=new ContentValues(2);
 				values.put(MESSAGE_INFO, bytes);
-				values.put(MESSAGE_ID, ((MessageStatusModel) obj).getFromId());
+				values.put(MESSAGE_ID, ((MessageStatusModel) obj).getId());
+				values.put(USER_ID, ((OneKiloApplication) context.getApplicationContext()).user.getId());
 			}
 			else if(obj instanceof Hot) {
 				byte[] bytes=serialize((Hot) obj);
@@ -157,16 +158,6 @@ public class Conn extends SQLiteOpenHelper {
 		}		
 	}
 	
-	/**
-	 * 删除MessageStatusModel
-	 */
-	public void deleteMessageStatusModel() {
-		synchronized (this) {
-			SQLiteDatabase db=this.getWritableDatabase();
-			db.delete(MESSAGE_TOPIC, null, null);
-			db.close();
-		}
-	}
 	
 	/**
 	 * 删除deleteHotModel
@@ -229,7 +220,7 @@ public class Conn extends SQLiteOpenHelper {
 		synchronized (this) {
 			LinkedList<MessageStatusModel> model_list=new LinkedList<MessageStatusModel>();
 			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cs=db.query(MESSAGE_TOPIC, null, null, null, null, null, null, null);
+			Cursor cs=db.query(MESSAGE_TOPIC, null, USER_ID+"=?", new String[]{((OneKiloApplication) context.getApplicationContext()).user.getId()}, null, null, null, null);
 			cs.moveToFirst();
 			for(int i=0;i<cs.getCount();i++) {
 				cs.moveToPosition(i);
@@ -259,6 +250,27 @@ public class Conn extends SQLiteOpenHelper {
 			db.close();
 			return model_list;
 		}		
+	}
+	
+	/**
+	 * 根据id返回hot
+	 * @param HotId
+	 * @return
+	 */
+	public Hot getHotModel(int HotId) {
+		synchronized (this) {
+			Hot hot=null;
+			SQLiteDatabase db=this.getReadableDatabase();
+			Cursor cs=db.query(HOT_TOPIC, null, USER_ID+"=? and "+HOT_ID+"=?", new String[]{((OneKiloApplication) context.getApplicationContext()).user.getId(), ""+HotId}, null, null, null);
+			cs.moveToFirst();
+			if(cs.getCount()>0) {
+				cs.moveToPosition(0);
+				hot=deserializeHotModel(cs.getBlob(1));
+			}
+			cs.close();
+			db.close();
+			return hot;
+		}
 	}
 	
 	/**
@@ -306,9 +318,9 @@ public class Conn extends SQLiteOpenHelper {
 	 * @param fromId
 	 * @return
 	 */
-	public boolean isMessageExists(int fromId) {
+	public boolean isMessageExists(int id) {
 		SQLiteDatabase db=this.getReadableDatabase();
-		Cursor cs=db.query(MESSAGE_TOPIC, null, MESSAGE_ID+"=?", new String[]{""+fromId}, null, null, null, null);
+		Cursor cs=db.query(MESSAGE_TOPIC, null, MESSAGE_ID+"=? and "+USER_ID+"=?", new String[]{""+id, ((OneKiloApplication) context.getApplicationContext()).user.getId()}, null, null, null, null);
 		cs.moveToFirst();
 		if(cs.getCount()>0) {
 			return true;
@@ -321,15 +333,20 @@ public class Conn extends SQLiteOpenHelper {
 	 * @param fromId
 	 * @param noreadCount
 	 */
-	public void updateNoReadCount(int fromId, int noreadCount, int data) {
+	public void updateNoReadCount(int id, int noreadCount, int data, String messageUrl, String content, int msgType, String action, String title) {
 		synchronized (this) {
 			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cs=db.query(MESSAGE_TOPIC, null, MESSAGE_ID+"=?", new String[]{""+fromId}, null, null, null, null);
+			Cursor cs=db.query(MESSAGE_TOPIC, null, MESSAGE_ID+"=? and "+USER_ID+"=?", new String[]{""+id, ((OneKiloApplication) context.getApplicationContext()).user.getId()}, null, null, null, null);
 			cs.moveToFirst();
 			if(cs.getCount()>0) {
 				cs.moveToPosition(0);
 				MessageStatusModel model=deserializeMessageStatusModel(cs.getBlob(1));
 				model.setNoReadCount(noreadCount);
+				model.setContent(content);
+				model.setIcon(messageUrl);
+				model.setMsgType(msgType);
+				model.setAction(action);
+				model.setTitle(title);
 				//只有接收推送过来消息时，才修改最后一条信息的时间
 				if(data!=0) {
 					model.setSendDate(data);
@@ -340,37 +357,7 @@ public class Conn extends SQLiteOpenHelper {
 				ContentValues values=new ContentValues();
 				byte[] bytes=serialize(model);
 				values.put(MESSAGE_INFO, bytes);
-				db2.update(MESSAGE_TOPIC, values, MESSAGE_ID+"=?", new String[]{""+fromId});
-				db2.close();
-			}
-		}
-	}
-	
-	/**
-	 * 更新图片url
-	 * @param fromId
-	 * @param messageUrl
-	 */
-	public void updateOldMessage(int fromId, String messageUrl, String msgDesc) {
-		synchronized (this) {
-			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cs=db.query(MESSAGE_TOPIC, null, MESSAGE_ID+"=?", new String[]{""+fromId}, null, null, null, null);
-			cs.moveToFirst();
-			if(cs.getCount()>0) {
-				cs.moveToPosition(0);
-				MessageStatusModel model=deserializeMessageStatusModel(cs.getBlob(1));
-				model.setIcon(messageUrl);
-				//消息页面刷新出来的数据需要替换最新消息
-				if(!msgDesc.equals("")) {
-					model.setMsgDesc(msgDesc);					
-				}
-				cs.close();
-				db.close();
-				SQLiteDatabase db2=this.getWritableDatabase();
-				ContentValues values=new ContentValues();
-				byte[] bytes=serialize(model);
-				values.put(MESSAGE_INFO, bytes);
-				db2.update(MESSAGE_TOPIC, values, MESSAGE_ID+"=?", new String[]{""+fromId});
+				db2.update(MESSAGE_TOPIC, values, MESSAGE_ID+"=?", new String[]{""+id});
 				db2.close();
 			}
 		}

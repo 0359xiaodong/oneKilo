@@ -225,6 +225,9 @@ public class WebInfoTabActivity extends TabActivity {
 			bundle=new Bundle();
 			bundle.putString("hotName", menuName);
 			bundle.putSerializable("AddForm", af);
+			if(getIntent().getExtras().getString("groupId")!=null) {
+				bundle.putString("groupId", getIntent().getExtras().getString("groupId"));
+			}			
 			intent.putExtras(bundle);
 			startActivityForResult(intent, 1101);
 			break;

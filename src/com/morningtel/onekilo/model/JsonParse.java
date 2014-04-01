@@ -2,6 +2,7 @@ package com.morningtel.onekilo.model;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -434,4 +435,78 @@ public class JsonParse {
 		}
 		return "0:网络异常，请稍后再试";
 	} 
+	
+	/**
+	 * 获取消息列表
+	 * @param value
+	 * @param context
+	 * @return
+	 */
+	public static LinkedList<MessageStatusModel> getMessageStatusModelList(String value, Context context) {
+		int databaseNum=Conn.getInstance(context).getMessageStatusModelList().size();
+		try {
+			JSONObject obj=new JSONObject(value);
+			JSONArray array=new JSONArray(obj.getString("data"));
+			for(int i=0;i<array.length();i++) {
+				MessageStatusModel model=new MessageStatusModel();
+				JSONObject data_obj=array.getJSONObject(i);
+				model.setAction(data_obj.getString("action"));
+				model.setFromId(data_obj.getString("fromId"));
+				String temp=new String(data_obj.getString("fromName").getBytes("iso-8859-1"), "utf-8");
+				model.setFromName(temp);
+				model.setIcon(data_obj.getString("imageUrl"));
+				model.setId(data_obj.getInt("id"));
+				model.setNoReadCount(data_obj.getInt("noReadCount"));
+				model.setSendDate(data_obj.getInt("sendDate"));
+				model.setToId(data_obj.getString("toId"));
+				model.setMsgId(data_obj.getString("msgId"));
+				model.setTitle(new String(data_obj.getString("title").getBytes("iso-8859-1"), "utf-8"));
+				model.setContent(new String(data_obj.getString("content").getBytes("iso-8859-1"), "utf-8"));
+				model.setMsgType(data_obj.getInt("msgType"));
+				model.setMsgMinType(data_obj.getInt("msgMinType"));
+				if(databaseNum==0) {
+					Conn.getInstance(context).insertModel(model);
+				}	
+				else {
+					if(Conn.getInstance(context).isMessageExists(Integer.parseInt(data_obj.getString("id")))) {
+						Conn.getInstance(context).updateNoReadCount(Integer.parseInt(data_obj.getString("id")), data_obj.getInt("noReadCount"), data_obj.getInt("sendDate"), data_obj.getString("imageUrl"), new String(data_obj.getString("content").getBytes("iso-8859-1"), "utf-8"), data_obj.getInt("msgType"), data_obj.getString("action"), new String(data_obj.getString("title").getBytes("iso-8859-1"), "utf-8"));
+					}
+					else {
+						Conn.getInstance(context).insertModel(model);
+					}
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Conn.getInstance(context).getMessageStatusModelList();
+	}
+	
+	/**
+	 * 极光推送消息传递
+	 * @param str
+	 * @return
+	 */
+	public static JPushMessageModel getJPushMessageModel(Context context, String str, String content) {
+		JPushMessageModel model=new JPushMessageModel();
+		try {
+			JSONObject obj=new JSONObject(str);
+			model.setContent(content);
+			model.setId(obj.getInt("id"));
+			model.setAction(obj.getString("action"));
+			model.setMsgType(obj.getInt("msgType"));
+			model.setSendDate(obj.getInt("sendDate"));
+			model.setImageUrl(obj.getString("imageUrl"));
+			model.setTitle(obj.getString("title"));
+			return model;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

@@ -55,6 +55,60 @@ public class MessageStatusModel implements Serializable {
 	 *
 	 */
 	private String icon;
+	private String toId;
+	private String msgId;
+	private String title;
+	private String content;
+	private int msgType;
+	private int msgMinType;
+
+	public int getMsgMinType() {
+		return msgMinType;
+	}
+
+	public void setMsgMinType(int msgMinType) {
+		this.msgMinType = msgMinType;
+	}
+
+	public int getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(int msgType) {
+		this.msgType = msgType;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getMsgId() {
+		return msgId;
+	}
+
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
+	}
+
+	public String getToId() {
+		return toId;
+	}
+
+	public void setToId(String toId) {
+		this.toId = toId;
+	}
 
 	public int getId() {
 		return id;
