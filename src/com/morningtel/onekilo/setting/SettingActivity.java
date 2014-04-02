@@ -1,5 +1,7 @@
 package com.morningtel.onekilo.setting;
 
+import java.util.Set;
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -8,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.mobstat.StatService;
 import com.lidroid.xutils.BitmapUtils;
 import com.morningtel.onekilo.BaseActivity;
+import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.BitmapHelp;
 import com.morningtel.onekilo.common.CommonUtils;
@@ -68,6 +72,16 @@ public class SettingActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				MainActivity.getInstance().loginOut();
+				
+				JPushInterface.setAliasAndTags(getApplicationContext(), "", null, new TagAliasCallback() {
+
+					@Override
+					public void gotResult(int arg0, String arg1, Set<String> arg2) {
+						// TODO Auto-generated method stub
+						System.out.println("自高容僕卦指"+arg0);
+					}});
+				XGPushManager.setTag(getApplicationContext(), "");
+				
 				//自高容僕購液
 				JPushInterface.stopPush(getApplicationContext());
 				XGPushManager.unregisterPush(getApplicationContext());

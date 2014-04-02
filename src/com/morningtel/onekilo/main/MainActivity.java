@@ -2,6 +2,7 @@ package com.morningtel.onekilo.main;
 
 import cn.jpush.android.api.JPushInterface;
 
+import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
 import com.morningtel.onekilo.common.CommonUtils;
 import com.morningtel.onekilo.community.CommunityActivity;
@@ -20,6 +21,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
 public class MainActivity extends TabActivity {
@@ -34,12 +36,14 @@ public class MainActivity extends TabActivity {
 	LinearLayout xuexiao_layout=null;
 	ImageView shezhi=null;
 	LinearLayout shezhi_layout=null;
-	
+		
 	private static MainActivity instance=null;
 	
 	public static MainActivity getInstance() {
 		return instance;
 	}
+	
+	public String currentSpec="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,8 @@ public class MainActivity extends TabActivity {
 	}
 	
 	public void init() {
+		((OneKiloApplication) getApplication()).newMessage=(ImageView) findViewById(R.id.new_message);
+		((OneKiloApplication) getApplication()).newMessage.setVisibility(View.GONE);
 		xiaoxi_layout=(LinearLayout) findViewById(R.id.xiaoxi_layout);
 		xiaoxi_layout.setOnClickListener(new ImageView.OnClickListener() {
 
@@ -110,6 +116,14 @@ public class MainActivity extends TabActivity {
 		shezhi=(ImageView) findViewById(R.id.shezhi);
 		
 		host=getTabHost();
+		host.setOnTabChangedListener(new OnTabChangeListener() {
+			
+			@Override
+			public void onTabChanged(String tabId) {
+				// TODO Auto-generated method stub
+				currentSpec=tabId;
+			}
+		});
 		addTab("spec1", MessageActivity.class, R.drawable.xiaoxi);
 		addTab("spec2", LocalServiceActivity.class, R.drawable.shouye);
 		addTab("spec3", CommunityActivity.class, R.drawable.xuexiao);

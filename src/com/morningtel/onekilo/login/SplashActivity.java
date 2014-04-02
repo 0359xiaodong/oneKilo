@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.Window;
 
+import cn.jpush.android.api.BasicPushNotificationBuilder;
+import cn.jpush.android.api.JPushInterface;
+
 import com.baidu.mobstat.StatService;
 import com.morningtel.onekilo.OneKiloApplication;
 import com.morningtel.onekilo.R;
@@ -32,6 +35,14 @@ public class SplashActivity extends Activity {
 		
 		XGPushConfig.enableDebug(this, false);
 		initNotificationBuilder(getApplicationContext());
+		
+
+        BasicPushNotificationBuilder builder=new BasicPushNotificationBuilder(SplashActivity.this);
+        builder.statusBarDrawable=R.drawable.ic_launcher;
+        builder.notificationFlags=Notification.FLAG_AUTO_CANCEL;  //设置为自动消失
+        builder.notificationDefaults=Notification.DEFAULT_ALL;  // 设置为铃声与震动都要
+        JPushInterface.setPushNotificationBuilder(1, builder);
+        
 		
 		StatService.setDebugOn(true);
 		

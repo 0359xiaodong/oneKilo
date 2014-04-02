@@ -1,8 +1,10 @@
 package com.morningtel.onekilo;
 
 import java.io.File;
+import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
@@ -11,6 +13,7 @@ import com.morningtel.onekilo.model.User;
 
 import android.app.Application;
 import android.os.Environment;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class OneKiloApplication extends Application {
@@ -26,6 +29,8 @@ public class OneKiloApplication extends Application {
 	public BMapManager mBMapManager=null;
 	
 	public User user=null;
+	
+	public ImageView newMessage=null;
 	
 	@Override
 	public void onCreate() {
@@ -52,6 +57,13 @@ public class OneKiloApplication extends Application {
         
         JPushInterface.setDebugMode(true); 	//设置开启日志,发布时请关闭日志
         JPushInterface.init(this);
+        JPushInterface.setAliasAndTags(getApplicationContext(), "", null, new TagAliasCallback() {
+
+			@Override
+			public void gotResult(int arg0, String arg1, Set<String> arg2) {
+				// TODO Auto-generated method stub
+				System.out.println("极光推送返回"+arg0);
+			}});
 	}
 	
 	public class MyGeneralListener implements MKGeneralListener {

@@ -27,33 +27,45 @@
 	        android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:background="@drawable/di_bg">
-            <LinearLayout 
-                android:id="@+id/xiaoxi_layout"
-                android:orientation="vertical"
+            <RelativeLayout                 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
                 android:layout_margin="5dip"
-	            android:layout_weight="1"
-            	android:gravity="center"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content">
+	            android:layout_weight="1">
+                <LinearLayout 
+	                android:id="@+id/xiaoxi_layout"
+	                android:orientation="vertical"
+	            	android:gravity="center"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content">
+	                <ImageView 
+			            android:id="@+id/xiaoxi"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:src="@drawable/xiaoxi"/>
+	                <TextView 
+	                    android:text="消息"
+	                    android:layout_marginTop="2dip"
+	                    android:textColor="@android:color/white"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"/>
+	            </LinearLayout>
                 <ImageView 
-		            android:id="@+id/xiaoxi"
+                    android:id="@+id/new_message"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dip"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:src="@drawable/xiaoxi"/>
-                <TextView 
-                    android:text="消息"
-                    android:layout_marginTop="2dip"
-                    android:textColor="@android:color/white"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"/>
-            </LinearLayout>       
+                    android:src="@drawable/new_notify"/>
+            </RelativeLayout>
+                   
 	        <LinearLayout 
 	            android:id="@+id/shouye_layout"
                 android:orientation="vertical"
                 android:layout_margin="5dip"
 	            android:layout_weight="1"
             	android:gravity="center"
-	            android:layout_width="wrap_content"
+	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content">
                 <ImageView 
 		            android:id="@+id/shouye"
@@ -73,7 +85,7 @@
                 android:layout_margin="5dip"
 	            android:layout_weight="1"
             	android:gravity="center"
-	            android:layout_width="wrap_content"
+	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content">
                 <ImageView 
 		            android:id="@+id/xuexiao"
@@ -93,7 +105,7 @@
                 android:layout_margin="5dip"
 	            android:layout_weight="1"
             	android:gravity="center"
-	            android:layout_width="wrap_content"
+	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content">
                 <ImageView 
 		            android:id="@+id/shezhi"

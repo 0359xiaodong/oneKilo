@@ -5,7 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import cn.jpush.android.api.JPushInterface;
+
+import com.morningtel.onekilo.OneKiloApplication;
+import com.morningtel.onekilo.main.MainActivity;
 
 /**
  * 自定义接收器
@@ -47,6 +52,14 @@ public class MyReceiver extends BroadcastReceiver {
             bundle_xiaoxi.putString("message_content", message_content);
             intent_xiaoxi.putExtras(bundle_xiaoxi);
             context.sendBroadcast(intent_xiaoxi);
+            
+            if(!MainActivity.getInstance().currentSpec.equals("spec1")) {
+            	ImageView imageview=((OneKiloApplication) context.getApplicationContext()).newMessage;
+    			if(imageview!=null) {
+    				imageview.setVisibility(View.VISIBLE);
+    			}
+            }
+			
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "用户点击打开了通知");

@@ -244,7 +244,9 @@ public class Conn extends SQLiteOpenHelper {
 			cs.moveToFirst();
 			for(int i=0;i<cs.getCount();i++) {
 				cs.moveToPosition(i);
-				model_list.add(deserializeHotModel(cs.getBlob(1)));
+				Hot hot=deserializeHotModel(cs.getBlob(1));
+				System.out.println(hot.getId());
+				model_list.add(hot);
 			}
 			cs.close();
 			db.close();

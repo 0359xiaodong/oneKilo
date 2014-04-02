@@ -13,6 +13,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class MessageActivity extends BaseActivity {
 	
 	LinkedList<MessageStatusModel> model_list=null;
 	boolean isLoad=false;
+	boolean isReset=false;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class MessageActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				switch(model_list.get(position).getMsgType()) {
 				case 1:
-					Hot hot=Conn.getInstance(MessageActivity.this).getHotModel(model_list.get(position).getId());
+					Hot hot=Conn.getInstance(MessageActivity.this).getHotModel(Integer.parseInt(model_list.get(position).getAction()));
 					if(hot!=null) {
 						if(hot.getViewType()==Hot.CODE_VIEWTYPE&&android.os.Build.VERSION.SDK_INT<15) {
 							CommonUtils.showCustomToast(MessageActivity.this, "您的系统版本过低，暂时不支持"+hot.getTabs().get(0).getName()+"功能");
@@ -159,6 +161,12 @@ public class MessageActivity extends BaseActivity {
 					startActivity(intent3);
 					break;
 				}
+				if(isReset||model_list.get(position).getNoReadCount()==0) {
+					return;
+				}
+				else {
+					resetMessageCount(model_list.get(position));
+				}				
 			}
 		});
 		adapter=new MessageAdapter(model_list, MessageActivity.this);
@@ -239,14 +247,16 @@ public class MessageActivity extends BaseActivity {
 			model_list.clear();
 			model_list.addAll(temp_list);
 		}
-		for(int i=0;i<model_list.size();i++) {
-			System.out.println(model_list.get(i).getSendDate()+" "+model_list.get(i).getSendDate());			
-		}
 	}
 
 	public void onResume() {
 		super.onResume();
 		StatService.onResume(this);
+		
+		ImageView imageview=((OneKiloApplication) getApplication()).newMessage;
+		if(imageview!=null) {
+			imageview.setVisibility(View.GONE);
+		}
 	}
 
 	public void onPause() {
@@ -303,9 +313,55 @@ public class MessageActivity extends BaseActivity {
 		model.setNoReadCount(1);
 		model.setSendDate(model_new.getSendDate());
 		model.setTitle(model_new.getTitle());
+		model.setMsgType(model_new.getMsgType());
 		model_list.add(0, model);
 		Conn.getInstance(MessageActivity.this).insertModel(model);
 		seqList();
 		adapter.notifyDataSetChanged();
+	}
+	
+	private void resetMessageCount(final MessageStatusModel model) {
+		
+		isReset=true;
+		
+		final Handler handler=new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				
+				isReset=false;
+				
+				super.handleMessage(msg);
+				isLoad=false;
+				super.handleMessage(msg);
+				if(msg.obj==null) {
+					CommonUtils.showCustomToast(MessageActivity.this, "网络异常，请稍后再试");
+				}
+				else {
+					String str=msg.obj.toString();
+					if(CommonUtils.convertNull(str).equals("")) {
+						CommonUtils.showCustomToast(MessageActivity.this, "网络异常，请稍后再试");
+					}
+					else {
+						Conn.getInstance(MessageActivity.this).updateNoReadCount(model.getId(), 0, model.getSendDate(), model.getIcon(), model.getContent(), model.getMsgType(), model.getAction(), model.getTitle());
+						adapter.notifyDataSetChanged();
+					}
+				}
+			}
+		};
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Message m=new Message();
+				HashMap<String, String> map=new HashMap<String, String>();
+				map.put("id", ""+model.getId());
+				map.put("token", ((OneKiloApplication) getApplicationContext()).user.getToken());
+				String result=CommonUtils.getWebData(map, ((OneKiloApplication) getApplicationContext()).webUrl+"message_resetMessageCount.do");
+				m.obj=result;
+				handler.sendMessage(m);
+			}}).start();
 	}
 }
