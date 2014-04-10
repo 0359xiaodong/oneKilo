@@ -53,7 +53,7 @@ public class MyReceiver extends BroadcastReceiver {
             intent_xiaoxi.putExtras(bundle_xiaoxi);
             context.sendBroadcast(intent_xiaoxi);
             
-            if(!MainActivity.getInstance().currentSpec.equals("spec1")) {
+            if(MainActivity.getInstance()!=null&&!MainActivity.getInstance().currentSpec.equals("spec1")) {
             	ImageView imageview=((OneKiloApplication) context.getApplicationContext()).newMessage;
     			if(imageview!=null) {
     				imageview.setVisibility(View.VISIBLE);

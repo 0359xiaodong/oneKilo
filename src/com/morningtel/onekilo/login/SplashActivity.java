@@ -37,12 +37,12 @@ public class SplashActivity extends Activity {
 		initNotificationBuilder(getApplicationContext());
 		
 
+        JPushInterface.setLatestNotifactionNumber(getApplicationContext(), 1);
         BasicPushNotificationBuilder builder=new BasicPushNotificationBuilder(SplashActivity.this);
         builder.statusBarDrawable=R.drawable.ic_launcher;
         builder.notificationFlags=Notification.FLAG_AUTO_CANCEL;  //设置为自动消失
         builder.notificationDefaults=Notification.DEFAULT_ALL;  // 设置为铃声与震动都要
         JPushInterface.setPushNotificationBuilder(1, builder);
-        
 		
 		StatService.setDebugOn(true);
 		
